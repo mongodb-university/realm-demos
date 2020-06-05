@@ -20,7 +20,7 @@ android {
 
     buildTypes {
         def mongodbRealmUrl = "https://realm-dev.mongodb.com"
-        def appId = "store-kswsv"
+        def appId = "inventory-demo-guiqc"
         debug {
             buildConfigField "String", "MONGODB_REALM_URL", "\"${mongodbRealmUrl}\""
             buildConfigField "String", "MONGODB_REALM_APP_ID", "\"${appId}\""

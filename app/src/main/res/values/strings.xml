@@ -8,6 +8,6 @@
     <string name="new_task">Add Item:</string>
     <string name="logout">Log Out</string>
     <string name="name">Item Name</string>
-    <string name="quantity">Item Quanitity</string>
+    <string name="quantity">Item Quantity</string>
     <string name="price">Item Price</string>
 </resources>
