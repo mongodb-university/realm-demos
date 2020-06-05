@@ -22,7 +22,7 @@ import org.bson.types.ObjectId
 internal class InventoryItemAdapter(data: OrderedRealmCollection<InventoryItem>) : RealmRecyclerViewAdapter<InventoryItem, InventoryItemAdapter.TaskViewHolder?>(data, true) {
     lateinit var _parent: ViewGroup
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.task_view, parent, false)
+        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
         _parent = parent
         return TaskViewHolder(itemView)
     }
