@@ -48,6 +48,20 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/input_partition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/partition"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_login"
             android:layout_width="fill_parent"

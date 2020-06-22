@@ -19,8 +19,8 @@ android {
     }
 
     buildTypes {
-        def mongodbRealmUrl = "https://realm-dev.mongodb.com"
-        def appId = "inventory-demo-guiqc"
+        def mongodbRealmUrl = "https://realm.mongodb.com"
+        def appId = "inventorysync-fyzyv"
         debug {
             buildConfigField "String", "MONGODB_REALM_URL", "\"${mongodbRealmUrl}\""
             buildConfigField "String", "MONGODB_REALM_APP_ID", "\"${appId}\""
