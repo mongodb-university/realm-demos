@@ -1,6 +1,8 @@
 package com.mongodb.inventorymanager
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +14,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import io.realm.Realm
-import io.realm.mongodb.User
-import io.realm.mongodb.sync.SyncConfiguration
-import com.mongodb.inventorymanager.model.InventoryItemAdapter
 import com.mongodb.inventorymanager.model.InventoryItem
-import io.realm.MutableRealmInteger
+import com.mongodb.inventorymanager.model.InventoryItemAdapter
+import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.log.RealmLog
+import io.realm.mongodb.User
+import io.realm.mongodb.sync.SyncConfiguration
+
 
 /*
  * TaskActivity: allows a user to view a collection of Tasks, edit the status of those tasks,
@@ -29,6 +31,7 @@ import io.realm.log.RealmLog
 class InventoryActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private var user: User? = null
+    private lateinit var partition: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: InventoryItemAdapter
     private lateinit var fab: FloatingActionButton
@@ -46,7 +49,10 @@ class InventoryActivity : AppCompatActivity() {
         }
         else {
             // configure realm to use the current user and the partition corresponding to "My Project"
-            val config = SyncConfiguration.Builder(user!!, "All Stores")
+            val sharedPreference =  getSharedPreferences("prefs name", Context.MODE_PRIVATE)
+            partition = sharedPreference.getString("partition","101")!!
+            Log.v(TAG(), "Partition value passed: ${partition}")
+            val config = SyncConfiguration.Builder(user!!, partition)
                 .waitForInitialRemoteData()
                 .build()
 
@@ -115,7 +121,7 @@ class InventoryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_task_menu, menu)
+        menuInflater.inflate(R.menu.activity_inventory_menu, menu)
         return true
     }
 

@@ -1,17 +1,22 @@
 package com.mongodb.inventorymanager
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import io.realm.mongodb.Credentials
+import androidx.appcompat.app.AppCompatActivity
 import io.realm.log.RealmLog
+import io.realm.mongodb.Credentials
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var username: EditText
     private lateinit var password: EditText
+    private lateinit var partition: EditText
     private lateinit var loginButton: Button
     private lateinit var createUserButton: Button
 
@@ -20,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         username = findViewById(R.id.input_username)
         password = findViewById(R.id.input_password)
+        partition = findViewById(R.id.input_partition)
         loginButton = findViewById(R.id.button_login)
         createUserButton = findViewById(R.id.button_create)
 
@@ -32,8 +38,12 @@ class LoginActivity : AppCompatActivity() {
         moveTaskToBack(true)
     }
 
-    private fun onLoginSuccess() {
+    private fun onLoginSuccess(partition: String) {
         // successful login ends this activity, bringing the user back to the task activity
+        val sharedPreference =  getSharedPreferences("prefs name", Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
+        editor.putString("partition",partition)
+        editor.commit()
         finish()
     }
 
@@ -46,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
         // zero-length usernames and passwords are not valid (or secure), so prevent users from creating accounts with those client-side.
         username.text.toString().isEmpty() -> false
         password.text.toString().isEmpty() -> false
+        partition.text.toString().isEmpty() -> false
         else -> true
     }
 
@@ -62,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
 
         val username = this.username.text.toString()
         val password = this.password.text.toString()
+        val partition = this.partition.text.toString()
 
 
         if (createUser) {
@@ -89,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
                     RealmLog.error(it.error.toString())
                     onLoginFailed(it.error.message ?: "An error occurred.")
                 } else {
-                    onLoginSuccess()
+                    onLoginSuccess(partition)
                 }
             }
         }
