@@ -98,7 +98,7 @@ class InventoryActivity : AppCompatActivity() {
                 .setCancelable(true)
                 .setPositiveButton("Create") { dialog, _ -> run {
                     dialog.dismiss()
-                    val newItem = InventoryItem(nameInput.text.toString(), quantityInput.text.toString().toLong(), priceInput.text.toString().toDouble())
+                    val newItem = InventoryItem(nameInput.text.toString(), quantityInput.text.toString().toLong(), priceInput.text.toString().toDouble(), partition)
                     // all realm writes need to occur inside of a transaction
                     realm.executeTransactionAsync { realm ->
                         realm.insert(newItem)
