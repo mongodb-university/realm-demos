@@ -105,7 +105,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, Storyboarded {
 		showAlert(title: "Error", message: message)
 	}
 	
-	func completeSignIn(type: AuthType, user: User?, error: Error?) {
+	func completeSignIn(type: AuthType, user: RealmSwift.User?, error: Error?) {
 		setLoading(false)
 		
 		guard error == nil else {
@@ -128,20 +128,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate, Storyboarded {
 	
 	@IBAction func anonymousSignIn(_ sender: UIButton) {
 		setLoading(true)
-		app.login(credentials: .anonymous) { [weak self] maybeUser, error in
+		app.login(credentials: .anonymous) { [weak self] result in
 			DispatchQueue.main.async {
-				self?.completeSignIn(type: .anonymous, user: maybeUser, error: error)
+				switch result {
+				case let .success(user):
+					self?.completeSignIn(type: .anonymous, user: user, error: nil)
+				case let .failure(error):
+					self?.completeSignIn(type: .anonymous, user: nil, error: error)
+				}
 			}
 		}
 	}
 
 	@IBAction func signIn(_ sender: UIButton) {
 		setLoading(true)
-		app.login(credentials: .emailPassword(email: username!, password: password!)) { [weak self] maybeUser, error in
+		app.login(credentials: .emailPassword(email: username!, password: password!)) { [weak self] result in
 			DispatchQueue.main.async {
-				if error == nil { self?.updateKeychain() }
-				
-				self?.completeSignIn(type: .emailPassword, user: maybeUser, error: error)
+				switch result {
+				case let .success(user):
+					self?.updateKeychain()
+					self?.completeSignIn(type: .emailPassword, user: user, error: nil)
+				case let .failure(error):
+					self?.completeSignIn(type: .emailPassword, user: nil, error: error)
+				}
 			}
 		}
 	}
