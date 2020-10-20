@@ -44,10 +44,17 @@ class InventoryViewController: UITableViewController, Storyboarded {
 				
 				return
 			}
-
+			
+			let config	= user.configuration(partitionValue: store)
+			
 			// Open a realm with the partition key set to the store.
 			do {
-				realm = try Realm(configuration: user.configuration(partitionValue: store))
+				// Sample code to have a local DB reset
+				if cleanDatabase {
+					_	= try Realm.deleteFiles(for: config)
+				}
+				
+				realm = try Realm(configuration: config)
 			} catch {
 				nav?.postErrorMessage(message: error.localizedDescription, isError: true)
 				

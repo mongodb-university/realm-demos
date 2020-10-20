@@ -20,6 +20,10 @@ class MainCoordinator: NSObject, Coordinator {
 	func start() {
 		app.syncManager.logLevel	= .info
 		
+		if let doCleanStr = ProcessInfo.processInfo.environment["CLEAN_REALM"], let doClean = Bool(doCleanStr) {
+			cleanDatabase	= doClean
+		}
+		
 		let vc = InventoryViewController.instantiate()
         
 		vc.coordinator	= self

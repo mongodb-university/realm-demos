@@ -16,3 +16,5 @@ struct Constants {
 
 let app		= App(id: Constants.REALM_APP_ID)
 var store	= "101"
+
+var cleanDatabase	= false
