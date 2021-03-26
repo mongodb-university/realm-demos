@@ -1,0 +1,78 @@
+{
+    "collection": "InventoryItem",
+    "database": "InventoryDemo",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "fields": {
+                "_id": {
+                    "write": true
+                },
+                "_partition": {
+                    "write": true
+                },
+                "coordinates": {
+                    "write": true
+                },
+                "max_temp": {
+                    "write": true
+                },
+                "min_quantity": {
+                    "write": true
+                },
+                "name": {
+                    "write": true
+                },
+                "price": {
+                    "write": true
+                },
+                "quantity": {
+                    "write": true
+                },
+                "sensorId": {
+                    "write": true
+                },
+                "spoiled": {
+                    "write": true
+                },
+                "supplier": {
+                    "write": true
+                },
+                "temp": {
+                    "write": true
+                }
+            },
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "_partition": {
+                "bsonType": "string"
+            },
+            "min_quantity": {
+                "bsonType": "int"
+            },
+            "name": {
+                "bsonType": "string"
+            },
+            "price": {
+                "bsonType": "double"
+            },
+            "quantity": {
+                "bsonType": "int"
+            },
+            "supplier": {
+                "bsonType": "string"
+            }
+        },
+        "title": "InventoryItem"
+    }
+}

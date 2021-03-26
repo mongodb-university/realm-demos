@@ -1,0 +1,16 @@
+{
+    "config_version": 20200603,
+    "name": "Inventory",
+    "location": "US-VA",
+    "deployment_model": "GLOBAL",
+    "security": {},
+    "hosting": {
+        "enabled": true
+    },
+    "custom_user_data_config": {
+        "enabled": false
+    },
+    "sync": {
+        "development_mode_enabled": false
+    }
+}

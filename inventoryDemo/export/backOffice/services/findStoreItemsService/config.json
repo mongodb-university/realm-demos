@@ -1,0 +1,6 @@
+{
+    "name": "findStoreItemsService",
+    "type": "http",
+    "config": {},
+    "version": 1
+}

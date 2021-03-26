@@ -1,0 +1,783 @@
+
+<html>
+  <head>
+    <title>Item Maintenance</title>
+    <!-- ====================================================================================================================== -->
+    <!-- Date:       Author:           Version:        Notes:                                                                   -->
+    <!-- ---------------------------------------------------------------------------------------------------------------------- -->
+    <!-- 2020-06-24  Britton LaRoche   1.0            Initial Release                                                           -->
+    <!-- 2020-06-26  Britton LaRoche   1.1            Updated for multi tennant                                                 -->
+    <!-- ====================================================================================================================*/ -->
+    <!-- https://datatables.net/examples/styling/bootstrap4 -->
+    <link rel="stylesheet" type="text/css" href="./customer.css">
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.9.0/stitch.js"></script>
+    <script src="https://unpkg.com/@mongodb-js/charts-embed-dom@next"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" href="./img/demo.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <script>
+        const sdk = new ChartsEmbedSDK;
+        const inventoryAppID = "inventory-hhsot";
+        const client = stitch.Stitch.initializeDefaultAppClient(inventoryAppID);
+        const db = client.getServiceClient(stitch.RemoteMongoClient.factory,
+        "mongodb-atlas").db('InventoryDemo');
+        function displayItemsOnLoad() {
+          client.auth
+            .loginWithCredential(new stitch.AnonymousCredential())
+            .then(displayItems)
+            .then(defaultCompany)
+            .catch(console.error);
+        }
+        function setCookie(cname, cvalue, exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+          var expires = "expires="+d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        function getCookie(cname) {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        }
+        function editItem( aPartition, aItemId, aName, aPrice, aQuantity, aMinQuantity, aSupplier, aCoordinates){
+            document.getElementById("partition").value = aPartition;
+            document.getElementById("itemId").value = aItemId;
+            document.getElementById("name").value = aName;
+            document.getElementById("price").value = aPrice;
+            document.getElementById("quantity").value = aQuantity;
+            document.getElementById("mQuantity").value = aMinQuantity;
+            document.getElementById("supplier").value = aSupplier;
+            document.getElementById("coordinates").value = aCoordinates;
+            drawStoreCircle(aPartition, aCoordinates, aName);
+        }
+        function escape(aString){
+          var fixedString = aString;
+          if (aString) {
+            var fixedString = aString.replace(/'/g, "\\'");
+          }
+          return fixedString;
+        }
+        function nvl(arg){
+          if (arg){
+            return arg;
+          }
+          return "";
+        }
+        async function displayItems() {
+          var searchDoc = {};
+          var vPartition = document.getElementById('sPartition');
+          var vName = document.getElementById('sName');
+          var vPrice = document.getElementById('sPrice');
+          var vQuantity = document.getElementById('sQuantity');
+          if ( vPartition.value != "") {
+          searchDoc["_partition"] =  {$regex: new RegExp(vPartition.value)};
+          }
+          if ( vName.value != "") {
+          searchDoc["name"] = { $regex: new RegExp(vName.value) };
+          }
+          if ( vPrice.value != "") {
+          searchDoc["price"] = parseFloat(vPrice.value);
+          }
+          if ( vQuantity.value != "") {
+          searchDoc["quantity"] = parseInt(vQuantity.value);
+          }
+          console.log("Search doc: "+ JSON.stringify(searchDoc));
+              var theader = "<th>Store ID</th><th>_id</th><th>Device</th><th>Price</th><th>Current Build Version</th><th>Min Build Version</th><th>Contact</th><th>Coordinates</th><th>Edit</th>";
+              db.collection('InventoryItem').find(searchDoc,{sort: { "_partition": 1 },limit: 100}).asArray()
+                .then(docs => {
+                  var thtml = "";
+                  var project = "";
+                  docs.map(c => {
+                    if (c) {
+                          //console.log("InventoryItem doc: " + JSON.stringify(c));
+                          thtml = thtml + "<tr>" +
+                          "<td>" + c._partition + "</td>" +
+                          "<td>" + c._id + "</td>" +
+                          "<td>" + c.name + "</td>" +
+                          "<td>" + c.price + "</td>" +
+                          "<td>" + c.quantity + "</td>" +
+                          "<td>" + c.min_quantity + "</td>" +
+                          "<td>" + c.supplier + "</td>" +
+                          "<td>" + c.coordinates + "</td>" +
+                          "<td>" +
+                            "<button type=\"checkbox\" class=\"blueTable\"" +
+                            "onClick=\"editItem(" +
+                                "\'"+ c._partition + "\'," +
+                                "\'"+ c._id + "\'," +
+                                "\'"+ escape(c.name) + "\'," +
+                                "\'"+ c.price + "\'," +
+                                "\'"+ c.quantity + "\'," +
+                                "\'"+ c.min_quantity + "\'," +
+                                "\'"+ c.supplier + "\'," +
+                                "\'"+ nvl(c.coordinates) + "\'" +
+                            ")\">" +
+                            "<i class=\"material-icons\" style=\"font-size:18px\">" +
+                            "mode_edit</i></button>" +
+                            "</td>" +
+                          "</tr>";
+                    }
+                  });
+
+                  //var version = docs.map(c => c.__stitch_sync_version.v).join("");
+                  //var taskVersion = task + ", version: " + version + "<br>";
+                  document.getElementById("items").innerHTML = "<div id=\"table-sortable\"><table id=\"itemList\" class=\"table sortable blueTable\">" + theader + thtml + "</table></div>";
+                  document.getElementById("user").innerHTML = "Stitch User: " + client.auth.user.id;
+
+                });
+       }
+       async function defaultCompany(){
+            var vCompanyName = getCookie("CompanyName");
+            //check the parameters to see if a company name was passed in
+            console.log("In defaultCompany: checking query string");
+            const queryString = window.location.search;
+            console.log("url queryString: " + queryString);
+            const urlParams = new URLSearchParams(queryString);
+            const company = urlParams.get('company')
+            console.log("company parameter: " +company );
+            if(company) {
+              if( company != ""){
+                vCompanyName = company;
+              }
+            }
+            //if we have no cookie set then check the text field and see if the user has typed one in
+            if (vCompanyName != "") {
+              document.getElementById("companyName").value = vCompanyName;
+              showCompany();
+              return;
+            } 
+            // We have no cookie and the user has not typed one in lets go with our
+            // "Brave Organics" default company
+            // Find Brave Organics
+            await db.collection('codes').find({"COMPANY_NAME":"Brave Organics"},{limit: 100}).asArray()
+              .then(docs => {
+                var cCompanyName = "";
+                var companyLogo = `https://${inventoryAppID}.mongodbstitch.com/img/BraveOrganics.png`;
+                console.log("Looking for default company");
+
+                docs.map(c => {
+                  console.log("docs.map c: " + JSON.stringify(c));
+                  if (c) {
+                      cCompanyName = c.COMPANY_NAME;
+                      console.log("Found default company: " + cCompanyName);
+                  } 
+                });
+                if (cCompanyName === "") {
+                  // we don't have the default company "Brave Organics" set up in the database
+                  // we will create the default company here.
+                  cCompanyName = "Brave Organics";
+                  console.log("Inserting  default company: " + cCompanyName);
+                  db.collection('codes').insertOne({
+                      "COMPANY_NAME":cCompanyName,
+                      "COMPANY_LOGO":companyLogo,
+                      "BUTTON_COLOR":"RGB(112,162,43)",
+                      "HOVER_COLOR":"rgb(50,110,120)",
+                      "OWNER":"Open",
+                      "STORE_ID":"101"
+                    }
+                  );
+                }
+                console.log("default cCompanyName: " + cCompanyName);
+                console.log("default companyLogo: " + companyLogo);
+                document.getElementById("companyName").value = cCompanyName;
+                var logoHtml = "<img width=\"205px\" src=\""+ companyLogo + "\">";
+                document.getElementById("displayLogo").innerHTML = logoHtml;
+                showCompany();
+            });
+        }
+        async function showCompany(){
+            var vCompanyName = document.getElementById("companyName").value;
+            if (vCompanyName === ""){
+              alert("Company Name is Required");
+              return;
+            }
+            setCookie("CompanyName",vCompanyName,365);
+            db.collection('codes').find({"COMPANY_NAME":vCompanyName},{limit: 1}).asArray()
+              .then(docs => {
+                var cCompanyLogo = "";
+                var cButtonColor = "";
+                var cHoverColor = "";
+                var cStoreId = "";
+                docs.map(c => {
+                  if (c) {
+                      cCompanyLogo = c.COMPANY_LOGO;
+                      cButtonColor = c.BUTTON_COLOR;
+                      cHoverColor = c.HOVER_COLOR;
+                      cStoreId = c.STORE_ID;
+                  }
+                });
+                var logoHtml = "<img width=\"205px\" src=\""+ cCompanyLogo + "\">";
+                document.getElementById("displayLogo").innerHTML = logoHtml;
+                document.getElementById("defaultStore").innerHTML = " Default Store ID: " + cStoreId;
+                document.getElementById("sPartition").value = cStoreId;
+                var bodyStyles = document.body.style;
+                if(cButtonColor){
+                    bodyStyles.setProperty('--button-color', cButtonColor);
+                    bodyStyles.setProperty('--hover-color', cHoverColor);
+                }
+                displayItems()
+                .then(markStoreProductsOnMap(document.getElementById('sPartition').value))
+                .then(showStores);
+            });
+        }
+        async function updateItem() {
+            var vPartition = document.getElementById('partition').value;
+            var vItemId = new stitch.BSON.ObjectId(document.getElementById('itemId').value);
+            var vName = document.getElementById('name').value;
+            var vPrice = document.getElementById('price').value;
+            var vQuantity = document.getElementById('quantity').value;
+            var vMinQuantity = document.getElementById('mQuantity').value;
+            var vSupplier = document.getElementById('supplier').value;
+            var vCoordinates = document.getElementById('coordinates').value;
+            var vCoordinatesArray;
+            if(vCoordinates){
+                vCoordinates = vCoordinates.split(",");
+                var lat = parseFloat(vCoordinates[1]);
+                var long = parseFloat(vCoordinates[0]);
+                vCoordinatesArray = [long,lat];
+            }
+            if ( isNaN(vQuantity)){
+              vQuantity = 0;
+            }
+            if ( isNaN(vMinQuantity)){
+              vMinQuantity = 0;
+            }
+            var result1 = await db.collection('InventoryItem').updateOne(
+  	        { _id:  vItemId},
+  	        { $set: {   "name": vName, 
+                        "_partition": vPartition, 
+                        "price": {"$numberDouble": vPrice}, 
+                        "quantity": {"$numberInt": vQuantity},
+                        "min_quantity": {"$numberInt": vMinQuantity},
+                        "supplier": vSupplier,
+                        "coordinates": 	vCoordinatesArray }
+                },
+                {upsert: true}
+            );
+            console.log("result1: " + JSON.stringify(result1));
+            displayItems();
+        }
+        function sortTable(){
+          //document.getElementById('itemList').DataTable();
+          $('#itemList').DataTable();
+          $('#itemList').addClass('bs-select');
+
+        }
+        async function showChart1(){
+          var ck = document.getElementById('showChart1').checked;
+          if(ck){
+            var vStoreId = document.getElementById('sPartition').value;
+            const chart = sdk
+              .createChart({
+                baseUrl: 'https://charts.mongodb.com/charts-realmdemo-pzehs',
+                chartId: 'ccdf9e55-d234-4bd1-8444-3196bb5851f6',
+                width: 800,
+                height: 400,
+                refreshInterval: 60
+              });
+              await chart.render(document.getElementById('chart1'));
+              await chart.setFilter({ "_partition": vStoreId });
+            } else {
+            document.getElementById("chart1").innerHTML = "";
+          }
+        }
+        async function showChart2(){
+          var ck = document.getElementById('showChart2').checked;
+          if(ck){
+            var vStoreId = document.getElementById('sPartition').value;
+            const chart2 = sdk
+                .createChart({
+                  baseUrl: 'https://charts.mongodb.com/charts-realmdemo-pzehs',
+                  chartId: '43baaa27-6452-45fa-953d-10735b154d43',
+                  width: 800,
+                  height: 400,
+                  refreshInterval: 60
+                });
+                await chart2.render(document.getElementById('chart2'))
+                await chart2.setFilter({ "_partition": vStoreId });
+          } else {
+            document.getElementById("chart2").innerHTML = "";
+          }
+        }
+        var myVar = setInterval(myTimer, 3000);
+
+        function myTimer() {
+            if (document.getElementById('autoRef').checked){
+                var d = new Date();
+                document.getElementById("lastUpdate").value = d.toLocaleTimeString();
+                displayItems();
+            }
+        }
+    </script>
+
+    </head>
+  <body onload="displayItemsOnLoad()">
+	<table>
+	<tr>
+	<td>
+		<div id="contact" class="leftpane">
+      <h3>Item Search</h3>
+      <div id=displayLogo></div>
+      <p id="user"></p>
+      <p id="defaultStore"></p>
+          <fieldset><input type="text" placeholder="Store Id:" id="sPartition"></fieldset>
+          <fieldset><input type="text" placeholder="Item Id:" id="sItemId"></fieldset>
+		      <fieldset><input type="text" placeholder="Item Name:" id="sName"></fieldset>
+		      <fieldset><input type="text" placeholder="Price:" id="sPrice"></fieldset>
+          <fieldset><input type="text" placeholder="Quantity:" id="sQuantity"></fieldset>
+          <fieldset>
+            <label for="autoRef"> Auto Refresh</label>
+            <input type="checkbox" id="autoRef" name="autoRef">
+            <br>
+            <label for="showCharts"> Show Charts</label>
+            <input type="checkbox" id="showChart1" name="showChart1" onClick="showChart1()">
+            <input type="checkbox" id="showChart2" name="showChart2" onClick="showChart2()">
+            <br>
+            <label for="showMap"> Show Map</label>
+            <input type="checkbox" id="showMap" name="showMap" checked="true" onClick="showMap()">
+            <input type="checkbox" id="showBigMap" checked="true" name="showBigMap" onClick="showBigMap()">
+            <br>
+            <label for="showStores"> Show Stores</label>
+            <input type="checkbox" id="showStores" checked="true" name="showStores" onClick="showStores()">
+            <input type="checkbox" id="showStoreItems" checked="true" name="showStoreItems">
+            <br>
+            <input type="text" placeholder="Last Update:" id="lastUpdate"></fieldset>
+		  <button type="submit" id="refresh" onClick="displayItems()">Search</button>
+		 </div>
+	</td>
+	<td>...</td>
+	<td>
+    <div id="contact" class="container">
+      <h1>Back office Administration (Realm Hosted)</h1>
+      <div id="chart1"></div>
+      <div id="chart2"></div>
+      <table class="blueTable"><tr>
+        <td align="center"><a href="./config.html" target="config"><img src="./img/config.png"></a><br><b>Configuration</b></td>
+        <td align="center"><a href="./addStoreItem.html" target="addrest"><img src="./img/restadd.png"></a><br><b>REST API Add</b></td>
+        <td align="center"><a href="./findStoreItem.html" target="findrest"><img src="./img/restfind.png"></a><br><b>REST API Find</b></td>
+        <td align="center"><a href="./postql.html" target="postql"><img src="./img/graphql.png"></a><br><b>GraphQL</b></td>
+        <td align="center"><a href="https://confluent.cloud/login" target="kafka"><img src="./img/kafka.png"></a><br><b>Kafka</b></td>
+        <td align="center"><a href="./slides.html" target="slides"><img src="./img/diagram.png"></a><br><b>Slides</b></td>
+      </tr></table>
+      <fieldset><input type="text" placeholder="Company Name:" id="companyName"></fieldset>
+      <button type="submit" id="contact-submit" onClick="showCompany()">Update Company</button>
+    </div>
+		<div id="contact" class="container">
+      <div id="mapid" 
+        style="width: 800px; height: 500px; 
+        margin-left: auto; margin-right: auto; 
+        border: 5px solid rgb(161, 185, 236);
+        border-radius: 8px"></div>
+      <h3>Item Maintenance</h3>
+            <fieldset><input type="text" placeholder="Store Id:" id="partition"></fieldset>
+            <fieldset><input type="text" placeholder="Item Id:" id="itemId"></fieldset>
+            <fieldset><input type="text" placeholder="Name:" id="name"></fieldset>
+            <fieldset><input type="text" placeholder="Price:" id="price"></fieldset>
+            <fieldset><input type="text" placeholder="Quantity:" id="quantity"></fieldset>
+            <fieldset><input type="text" placeholder="Min Quantity:" id="mQuantity"></fieldset>
+            <fieldset><input type="text" placeholder="Supplier:" id="supplier"></fieldset>
+            <fieldset><input type="text" placeholder="Coordinates:" id="coordinates"></fieldset>
+		  <hr>
+		  <button type="submit" id="contact-submit" onClick="updateItem()">Update Item</button>
+    </div>
+
+		<div id="contact" class= container>
+		<hr>
+			<button type="submit" id="refresh" onClick="displayItems()">Refresh Display</button>
+		<hr>
+		<div id="items">Loading...<br><img src="loading.gif"></div>
+    </div>
+	</td>
+	</tr>
+  </table>
+  <script>
+    //--------------------------------------------------------
+    //-- ALL LEAFLET MAP FUNCTIONS BELOW
+    //--------------------------------------------------------
+    var mymap = L.map('mapid').setView([33.115929, -96.839091], 13);
+    var mapCircle;
+    var storePopup;
+    var storeListPopup = [0];
+    var storeBtnList = [0];
+    var storeProductPopup;
+    var selectedStore = "";
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1
+    }).addTo(mymap);
+
+    mymap.on('click', onMapClick);
+    async function onMapClick() {
+      //markStoreProductsOnMap(document.getElementById('sPartition').value);
+    }
+  
+    function setStoreFromMap(aStoreId){
+        document.getElementById('sPartition').value = aStoreId;
+        displayItems();
+    }
+    async function markStoreProductsOnMap(aStoreId){
+      var coordinates = await getStoreCoordinates(aStoreId);
+      var strCoordinates = nvl(coordinates).toString();
+      drawStoreCircle(aStoreId,strCoordinates,"");
+    }
+    async function drawStoreCircle(aStoreId, aCoordinates, aItemName){
+      if(aCoordinates === ""){
+        return;
+      }
+      var popupHTML = "";
+      var vCoordinates = aCoordinates.split(",");
+      var lat = parseFloat(vCoordinates[1]);
+      var long = parseFloat(vCoordinates[0]);
+      mymap.setView([lat, long], 13);
+      if (mapCircle){
+        mymap.removeLayer(mapCircle);
+      }
+      if (storePopup){
+        mymap.removeLayer(storePopup);
+      }
+      mapCircle = L.circle([lat, long], 300, {
+        color: 'red',
+        fillColor: '#a03',
+        fillOpacity: 0.5
+      }).addTo(mymap).bindPopup(aCoordinates);
+
+      selectedStore = aStoreId;
+      var container = L.DomUtil.create('div');
+      if (aItemName) {
+          if(aItemName != ""){
+            selectedItemBtn = this.createButton('Item: ' + aItemName, container);
+            selectedItemBtn.style.width = '150px';
+            L.DomUtil.create('br','', container);
+            L.DomEvent.on(selectedItemBtn, 'click', () => {
+                setStoreFromMap(selectedStore);
+            });
+          }
+      }
+      selectedBtn = this.createButton('Store ID: ' + aStoreId, container);
+      selectedBtn.style.width = '150px';
+      var ck = document.getElementById('showStoreItems').checked;
+      if (ck){
+        var photo = await getStorePhoto(aStoreId);
+        if (photo) {
+          if(photo != ""){
+            L.DomUtil.create('br','', container);
+            var storeImg = L.DomUtil.create('img','', container);
+            storeImg.src = photo;
+            storeImg.style.width = '150px';
+            storeImg.style.height = '100px';
+          }
+        }
+        var itemTable = await getStoreItems(aStoreId);
+        if (itemTable) {
+          if(itemTable != ""){
+            var divtable = L.DomUtil.create('div','', container);
+            divtable.innerHTML = itemTable;
+          }
+        }
+      }
+
+      
+      storePopup = L.marker([lat,long]).addTo(mymap).bindPopup(container).openPopup();
+      L.DomEvent.on(selectedBtn, 'click', () => {
+          setStoreFromMap(selectedStore);
+      });
+
+      //storePopup = L.marker([lat,long]).addTo(mymap).bindPopup("<button type=\"submit\">Store ID: " + aStoreId +"</button>").openPopup();
+    }
+    function showStores(){
+      var ck = document.getElementById('showStores').checked;
+          if(ck){
+            mapLocations();
+          } else {
+            if (storeListPopup){
+              var length = storeListPopup.length;
+              for (i=0;i<length;i++){
+                mymap.removeLayer(storeListPopup[i]);
+              }
+            }
+          }
+    }
+    function showMap(){
+      var ck = document.getElementById('showMap').checked;
+          if(ck){
+            document.getElementById('mapid').style.display = "block";
+          } else {
+            document.getElementById('mapid').style.display = "none";
+          }
+    }
+    function showBigMap(){
+    var ck = document.getElementById('showBigMap').checked;
+          if(ck){
+            document.getElementById('mapid').style.height = "500px";
+          } else {
+            document.getElementById('mapid').style.height = "300px";
+          }
+    }
+    function createButton(label, container) {
+        var btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'submit');
+        btn.innerHTML = label;
+        return btn;
+    }
+    async function mapLocations(){
+      //console.log("Inside MapLocation Function");
+      await db.collection('location').find({},{sort: { "store_id": 1 }},{limit: 100}).asArray()
+        .then(docs => {
+          var vStoreId = "";
+          var vCoordinates = "";
+          var lat = 0.0;
+          var long = 0.0;
+          var i = 0;
+          var popupHTML ="";
+          docs.map(c => {
+            if (c) {
+                //console.log(JSON.stringify(c));
+                vStoreId = c.store_id;
+                vCoordinates = c.coordinates;
+                lat = parseFloat(vCoordinates[1]);
+                long = parseFloat(vCoordinates[0]);
+            
+                var container = L.DomUtil.create('div');
+                storeBtnList[i] = vStoreId;
+                // THERE HAS GOT TO BE A BETTER WAY TO DO THIS
+                // DYNAMIC LISTENERS - CAN'T FIND IT IN LEAFLET API
+                switch(i) {
+                case 0:
+                    storeBtn0 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn0, 'click', () => {
+                        setStoreFromMap(storeBtnList[0]);
+                    });
+                    break;
+                case 1:
+                    storeBtn1 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn1, 'click', () => {
+                        setStoreFromMap(storeBtnList[1]);
+                    });
+                    break;
+                case 2:
+                    storeBtn2 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn2, 'click', () => {
+                        setStoreFromMap(storeBtnList[2]);
+                    });
+                    break;
+                case 3:
+                    storeBtn3 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn3, 'click', () => {
+                        setStoreFromMap(storeBtnList[3]);;
+                    });
+                    break;
+                case 4:
+                    storeBtn4 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn4, 'click', () => {
+                        setStoreFromMap(storeBtnList[4]);
+                    });
+                    break;
+                case 5:
+                    storeBtn5 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn5, 'click', () => {
+                        setStoreFromMap(storeBtnList[5]);
+                    });
+                    break;
+                case 6:
+                    storeBtn6 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn6, 'click', () => {
+                        setStoreFromMap(storeBtnList[6]);
+                    });
+                    break;
+                case 7:
+                    storeBtn7 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn7, 'click', () => {
+                        setStoreFromMap(storeBtnList[7]);
+                    });
+                    break;
+                case 8:
+                    storeBtn8 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn8, 'click', () => {
+                        setStoreFromMap(storeBtnList[8]);;
+                    });
+                    break;
+                case 9:
+                    storeBtn9 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn9, 'click', () => {
+                        setStoreFromMap(storeBtnList[9]);
+                    });
+                    break;
+                case 10:
+                    storeBtn10 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn10, 'click', () => {
+                        setStoreFromMap(storeBtnList[10]);
+                    });
+                    break;
+                case 11:
+                    storeBtn11 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn11, 'click', () => {
+                        setStoreFromMap(storeBtnList[11]);
+                    });
+                    break;
+                case 12:
+                    storeBtn12 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn12, 'click', () => {
+                        setStoreFromMap(storeBtnList[12]);
+                    });
+                    break;
+                case 13:
+                    storeBtn13 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn13, 'click', () => {
+                        setStoreFromMap(storeBtnList[13]);;
+                    });
+                    break;
+                case 14:
+                    storeBtn14 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn14, 'click', () => {
+                        setStoreFromMap(storeBtnList[14]);
+                    });
+                    break;
+                case 15:
+                    storeBtn15 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn15, 'click', () => {
+                        setStoreFromMap(storeBtnList[15]);
+                    });
+                    break;
+                case 16:
+                    storeBtn16 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn16, 'click', () => {
+                        setStoreFromMap(storeBtnList[16]);
+                    });
+                    break;
+                case 17:
+                    storeBtn17 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn17, 'click', () => {
+                        setStoreFromMap(storeBtnList[17]);
+                    });
+                    break;
+                case 18:
+                    storeBtn18 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn18, 'click', () => {
+                        setStoreFromMap(storeBtnList[18]);;
+                    });
+                    break;
+                case 19:
+                    storeBtn19 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn19, 'click', () => {
+                        setStoreFromMap(storeBtnList[19]);
+                    });
+                    break;
+                case 20:
+                    storeBtn20 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn20, 'click', () => {
+                        setStoreFromMap(storeBtnList[20]);
+                    });
+                    break;
+                case 21:
+                    storeBtn21 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn21, 'click', () => {
+                        setStoreFromMap(storeBtnList[21]);
+                    });
+                    break;
+                case 22:
+                    storeBtn22 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn22, 'click', () => {
+                        setStoreFromMap(storeBtnList[22]);
+                    });
+                    break;
+                case 23:
+                    storeBtn23 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn23, 'click', () => {
+                        setStoreFromMap(storeBtnList[23]);;
+                    });
+                    break;
+                case 24:
+                    storeBtn24 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn24, 'click', () => {
+                        setStoreFromMap(storeBtnList[24]);
+                    });
+                    break;
+                case 25:
+                    storeBtn25 = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn25, 'click', () => {
+                        setStoreFromMap(storeBtnList[25]);
+                    });
+                    break;
+                default:
+                    storeBtn = this.createButton('Store ID: ' + vStoreId, container)
+                    L.DomEvent.on(storeBtn, 'click', () => {
+                        setStoreFromMap(vStoreId);
+                    });
+                }
+
+                storeListPopup[i] = L.marker([lat,long]).addTo(mymap).bindPopup(container);
+                i = i+1;
+            }
+          });
+        });
+    }
+    async function mapStoreProducts(aStoreId,aPhoto){
+      var photo = aPhoto;
+      if (photo === ""){
+        photo = await getStorePhoto(aStoreId);
+      }
+      var table = await getStoreItems(aStoreId);
+      var button = "<button type=\"submit\">Store ID: " + nvl(aStoreId) + 
+        "</button><br>";
+      if(photo != ""){
+        button = button +"<br><img width=\"150px\" height=\"100px\"src=\""+ nvl(photo)+"\">";
+      }
+      var popupHtml = button+table
+      return popupHtml;
+    }
+    async function getStorePhoto(aStoreId){
+      var photo = "";
+      locDoc = await db.collection('location').find({"store_id":aStoreId},{limit: 1}).asArray()
+        .then(docs => {
+          docs.map(c => {
+            if (c) {
+              photo = c.photo;
+            }
+          })
+      });
+      return photo;
+    }
+    async function getStoreCoordinates(aStoreId){
+      var coordinates = "";
+      locDoc = await db.collection('location').find({"store_id":aStoreId},{limit: 1}).asArray()
+        .then(docs => {
+          docs.map(c => {
+            if (c) {
+              coordinates = c.coordinates;
+            }
+          })
+      });
+      return coordinates;
+    }
+    async function getStoreItems(aStoreId){
+      var table ="<table style=\'font-size:100%\'>";
+      var items = await db.collection('InventoryItem').find({"_partition":aStoreId},{limit: 3}).asArray();
+      if(items){
+        if(Array.isArray(items)){}
+        for(i=0;i<items.length;i++){
+          table = table + "<tr><td>" + items[i].name + "</td><td>" + items[i].price + "</td></tr>"
+        }
+        table = table + "</table>";
+      }
+      return table;
+    }
+  </script>
+  </body>
+
+</html>

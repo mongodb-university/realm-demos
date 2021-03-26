@@ -1,0 +1,20 @@
+{
+    "name": "trg_kafkaSink",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT",
+            "UPDATE",
+            "REPLACE"
+        ],
+        "database": "InventoryDemo",
+        "collection": "kafka_sink",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "project": {},
+        "full_document": true,
+        "unordered": false
+    },
+    "function_name": "fnc_kafkaSync",
+    "disabled": false
+}
