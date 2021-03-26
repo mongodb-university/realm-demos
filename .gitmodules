@@ -1,0 +1,4 @@
+[submodule "Realm"]
+	path = Realm
+	url = https://github.com/pmanna-tse-realm/realm-sdk-binaries.git
+	branch = main
