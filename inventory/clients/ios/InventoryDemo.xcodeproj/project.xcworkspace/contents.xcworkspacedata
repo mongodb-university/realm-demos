@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/pmanna/Documents/Projects/Samples/InventoryDemo/InventoryDemo.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
