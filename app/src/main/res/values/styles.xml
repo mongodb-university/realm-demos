@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/charcoal</item>
+        <item name="colorPrimaryDark">@color/indigo</item>
+        <item name="colorAccent">@color/mulberry</item>
+    </style>
+</resources>

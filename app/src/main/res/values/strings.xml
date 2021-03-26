@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Inventory Manager</string>
+    <string name="username">Email</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create account</string>
+    <string name="login">Login</string>
+    <string name="more">\u22EE</string>
+    <string name="new_task">Add Item:</string>
+    <string name="logout">Log Out</string>
+    <string name="name">Item Name</string>
+    <string name="quantity">Item Quantity</string>
+    <string name="price">Item Price</string>
+    <string name="partition">Store</string>
+</resources>
