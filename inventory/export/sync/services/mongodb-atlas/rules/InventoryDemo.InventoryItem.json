@@ -1,6 +1,7 @@
 {
-    "database": "InventoryDemo",
     "collection": "InventoryItem",
+    "database": "InventoryDemo",
+    "id": "607ef34d21b3812fd6c96cb7",
     "roles": [
         {
             "name": "default",
