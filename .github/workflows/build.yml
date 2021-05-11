@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: |
            pwd
-           cd clients/ios-swiftui/InventoryDemo
+           cd inventory/clients/ios-swiftui/InventoryDemo
            xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='inventorysync-ctnnu' 
 # Will need to deploy the app using realm cli first      
 #    - name: Run tests
