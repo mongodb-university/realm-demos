@@ -1,5 +1,7 @@
 name: Build
 
+# TODO: See if we can speed up the xcodebuild command
+
 # Will need to expand this to other branches
 on:
   push:
@@ -11,17 +13,21 @@ jobs:
   build:
 
     runs-on: macos-latest
+    env:
+        TEST_ID: hello-lauren
 
     steps:
     - uses: actions/checkout@v2
     - name: "Define Realm APP Id"
       if: ${{ github.ref == 'refs/heads/main' }}
-      run: echo "We are in the main branch"
+      run: echo "We are in the main branch $REALM_APP_ID "
       env:
          REALM_APP_ID: inventorysync-ctnnu
     - name: Build
       run: |
            pwd
+           echo ${{ env.TEST_ID }}
+           echo "the test app id is: $TEST_ID"
            echo ${{ env.REALM_APP_ID }}
            echo "the realm app id is: $REALM_APP_ID"
            cd inventory/clients/ios-swiftui/InventoryDemo
