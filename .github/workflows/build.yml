@@ -3,11 +3,7 @@ name: Build
 # TODO: See if we can speed up the xcodebuild command
 
 # Will need to expand this to other branches
-on:
-  push:
-    branches: '**'
-  pull_request:
-    branches: '**'
+on: [push, pull_request]
 
 jobs:    
   build:
@@ -29,6 +25,7 @@ jobs:
       run: |
            echo ${{ env.REALM_APP_ID }}
            echo "the realm app id is: $REALM_APP_ID"
+           echo ${{ github.ref }}
 #     - name: Build
 #       run: |
 #            pwd
