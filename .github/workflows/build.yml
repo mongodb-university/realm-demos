@@ -27,6 +27,9 @@ jobs:
            echo "the realm app id is: $REALM_APP_ID"
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
+    - name: "Install Realm CLI"
+      run: | 
+           npm install -g mongodb-realm-cli@beta
 #     - name: Build
 #       run: |
 #            pwd
