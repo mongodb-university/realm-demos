@@ -2,6 +2,8 @@ name: Build
 
 # TODO: See if we can speed up the xcodebuild command
 
+# TODO: See if we can cache realm cli as it takes 2 minutes to install
+
 # Will need to expand this to other branches
 on: [push, pull_request]
 
@@ -27,14 +29,12 @@ jobs:
            echo "the realm app id is: $REALM_APP_ID"
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
-    - name: "Install Realm CLI"
+    - name: "Install Realm CLI & push the Realm app"
       run: | 
            npm install -g mongodb-realm-cli@beta
-#     - name: Build
+           realm-cli push --remote="${{ env.REALM_APP_ID }}"
+#     - name: "Build mobile app & run tests"
 #       run: |
-#            pwd
-#            echo ${{ env.TEST_ID }}
-#            echo "the test app id is: $TEST_ID"
 #            echo ${{ env.REALM_APP_ID }}
 #            echo "the realm app id is: $REALM_APP_ID"
 #            cd inventory/clients/ios-swiftui/InventoryDemo
