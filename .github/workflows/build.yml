@@ -23,6 +23,12 @@ jobs:
       run: echo "We are in the main branch $REALM_APP_ID "
       env:
          REALM_APP_ID: inventorysync-ctnnu
+    - name: "Test env varas"
+      run: |
+           echo ${{ env.TEST_ID }}
+           echo "the test app id is: $TEST_ID"
+           echo ${{ env.REALM_APP_ID }}
+           echo "the realm app id is: $REALM_APP_ID"
     - name: Build
       run: |
            pwd
