@@ -11,7 +11,7 @@ jobs:
     steps:
 #     - uses: actions/checkout@v2
 #     Setting env vars based on https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable      
-    - name: "Are we in Main branch?"
+    - name: "Are we in the Main branch?"
       if: ${{ github.ref == 'refs/heads/main' }}
       run: | 
            echo "REALM_APP_ID=inventorysync-ctnnu" >> $GITHUB_ENV
