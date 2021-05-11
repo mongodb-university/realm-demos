@@ -5,38 +5,28 @@ name: Build
 # Will need to expand this to other branches
 on:
   push:
-    branches: [ main ]
+    branches: '**'
   pull_request:
-    branches: [ main ]
+    branches: '**'
 
-jobs:
-#   setup: 
-#     runs-on: macos-latest
-#     steps:
-#     - name: "Define Realm APP Id"
-#       if: ${{ github.ref == 'refs/heads/main' }}
-#       run: echo "We are in the main branch $REALM_APP_ID "
-#       env:
-#          REALM_APP_ID: inventorysync-ctnnu
-    
+jobs:    
   build:
-#     needs: setup
     runs-on: macos-latest
-    env:
-        TEST_ID: hello-lauren
-
     steps:
 #     - uses: actions/checkout@v2
-    - name: "Define Realm APP Id"
+#     Setting env vars based on https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable      
+    - name: "Are we in Main branch?"
       if: ${{ github.ref == 'refs/heads/main' }}
-# https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable      
       run: | 
            echo "REALM_APP_ID=inventorysync-ctnnu" >> $GITHUB_ENV
            echo "We are in the main branch $REALM_APP_ID "
+    - name: "Are we in Lauren's dev branch?"
+      if: ${{ github.ref == 'refs/heads/lauren-dev' }}
+      run: | 
+           echo "REALM_APP_ID=lauren-dev-pjiuk" >> $GITHUB_ENV
+           echo "We are in Lauren's dev branch $REALM_APP_ID "
     - name: "Test env vars"
       run: |
-           echo ${{ env.TEST_ID }}
-           echo "the test app id is: $TEST_ID"
            echo ${{ env.REALM_APP_ID }}
            echo "the realm app id is: $REALM_APP_ID"
 #     - name: Build
@@ -48,6 +38,3 @@ jobs:
 #            echo "the realm app id is: $REALM_APP_ID"
 #            cd inventory/clients/ios-swiftui/InventoryDemo
 #           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' 
-# Will need to deploy the app using realm cli first      
-#    - name: Run tests
-#      run: swift test -v
