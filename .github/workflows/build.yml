@@ -10,28 +10,28 @@ on:
     branches: [ main ]
 
 jobs:
-  setup: 
-    runs-on: macos-latest
-    steps:
-    - name: "Define Realm APP Id"
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: echo "We are in the main branch $REALM_APP_ID "
-      env:
-         REALM_APP_ID: inventorysync-ctnnu
-    
-  build:
-    needs: setup
-    runs-on: macos-latest
-    env:
-        TEST_ID: hello-lauren
-
-    steps:
-    - uses: actions/checkout@v2
+#   setup: 
+#     runs-on: macos-latest
+#     steps:
 #     - name: "Define Realm APP Id"
 #       if: ${{ github.ref == 'refs/heads/main' }}
 #       run: echo "We are in the main branch $REALM_APP_ID "
 #       env:
 #          REALM_APP_ID: inventorysync-ctnnu
+    
+  build:
+#     needs: setup
+    runs-on: macos-latest
+    env:
+        TEST_ID: hello-lauren
+
+    steps:
+#     - uses: actions/checkout@v2
+    - name: "Define Realm APP Id"
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: | 
+           echo "::set-env $REALM_APP_ID=DAY_OF_WEEK::inventorysync-ctnnu"
+           echo "We are in the main branch $REALM_APP_ID "
     - name: "Test env vars"
       run: |
            echo ${{ env.TEST_ID }}
