@@ -14,11 +14,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: "Define Realm APP Id"
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: echo "We are in the main branch"
+      env:
+         REALM_APP_ID: inventorysync-ctnnu
     - name: Build
       run: |
            pwd
+           echo ${{ env.REALM_APP_ID }}
+           echo "the realm app id is: $REALM_APP_ID"
            cd inventory/clients/ios-swiftui/InventoryDemo
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='inventorysync-ctnnu' 
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' 
 # Will need to deploy the app using realm cli first      
 #    - name: Run tests
 #      run: swift test -v
