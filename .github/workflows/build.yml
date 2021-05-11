@@ -1,0 +1,21 @@
+name: Build
+
+# Will need to expand this to other branches
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='inventorysync-ctnnu' 
+# Will need to deploy the app using realm cli first      
+#    - name: Run tests
+#      run: swift test -v
