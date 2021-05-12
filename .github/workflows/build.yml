@@ -29,6 +29,9 @@ jobs:
            echo "the realm app id is: $REALM_APP_ID"
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
+    - name: "Test if env variable is set"
+      if: ${{ env.REALM_APP_ID }}
+      run: echo "The env variable is $REALM_APP_ID"
     - name: "Install Realm CLI & push the Realm app"
 # Adding --realm-url and --atlas-url to login command to workaround authentication error
       run: | 
