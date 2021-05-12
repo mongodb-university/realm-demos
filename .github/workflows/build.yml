@@ -29,16 +29,27 @@ jobs:
            echo "the realm app id is: $REALM_APP_ID"
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
-    - name: "Test if env variable is set"
-      if: ${{ env.REALM_APP_ID }}
-      run: echo "The env variable is $REALM_APP_ID"
-    - name: "Install Realm CLI & push the Realm app"
-# Adding --realm-url and --atlas-url to login command to workaround authentication error
+# Adding --realm-url and --atlas-url to login command to workaround authentication error           
+    - name: "Install the Realm CLI & authenticate"
       run: | 
            npm install -g mongodb-realm-cli@beta
            cd inventory/export/sync
            realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
+    - name: "Push updated copy of the Realm app if we have the Realm App ID"
+      if: ${{ env.REALM_APP_ID }}
+      run: | 
+           cd inventory/export/sync
            realm-cli push --remote="${{ env.REALM_APP_ID }}"
+    - name: "Create a new Realm app for pull requests where we the Realm app does not yet exist"
+      if: ${{ !env.REALM_APP_ID }}
+      run: |
+           echo "The env variable is not set"
+           realm-cli import -y
+           output=$(realm-cli app describe)
+           echo "$output"
+           app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
+           echo "$app_id"
+           echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
 #     - name: "Build mobile app & run tests"
 #       run: |
 #            echo ${{ env.REALM_APP_ID }}
