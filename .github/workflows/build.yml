@@ -30,8 +30,10 @@ jobs:
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
     - name: "Install Realm CLI & push the Realm app"
+# Looks like auth is broken in beta5. Going to specify beta 4
+#           npm install -g mongodb-realm-cli@beta
       run: | 
-           npm install -g mongodb-realm-cli@beta
+           npm install -g mongodb-realm-cli@2.0.0-beta.4
            pwd
            cd inventory/export/sync
            realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}"
