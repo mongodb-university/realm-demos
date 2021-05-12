@@ -30,16 +30,23 @@ jobs:
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
 # Adding --realm-url and --atlas-url to login command to workaround authentication error           
-    - name: "Install the Realm CLI & authenticate"
+    - name: "Install the Realm CLI & authenticate (generic api key)"
+      if: ${{ env.REALM_APP_ID }}
       run: | 
            npm install -g mongodb-realm-cli@beta
            realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
+# Making these separate steps since specifying the project id isn't working so we need to use separate API keys
+    - name: "Install the Realm CLI & authenticate (Testing Project api key)"
+      if: ${{ !env.REALM_APP_ID }}
+      run: | 
+           npm install -g mongodb-realm-cli@beta
+           realm-cli login --api-key="${{ secrets.REALM_API_TESTING_PROJECT_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_TESTING_PROJECT_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
     - name: "Push updated copy of the Realm app if we have the Realm App ID"
       if: ${{ env.REALM_APP_ID }}
       run: | 
            cd inventory/export/sync
            realm-cli push --remote="${{ env.REALM_APP_ID }}"
-    - name: "Create a new Realm app for pull requests where we the Realm app does not yet exist"
+    - name: "Create a new Realm app for pull requests where the Realm app does not yet exist"
       if: ${{ !env.REALM_APP_ID }}
       run: |
            echo "The env variable is not set"
