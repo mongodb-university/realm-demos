@@ -29,23 +29,17 @@ jobs:
            echo "the realm app id is: $REALM_APP_ID"
            echo ${{ github.ref }}
            echo ${{ github.head_ref }}
+# For Pull Requests, update the database name to be a unique name based on the current date and time
+# Also, set the environment to be the Testing envrionment
     - name: "Set environment variables for pull requests"
       if: ${{ !env.REALM_APP_ID }}
       run: | 
-           pwd
            cd inventory/export/sync/environments
-           pwd
-           cat testing.json
-           echo "About to update testing.json"
            time=$(date +%s%N)
-           printf '{\n     "values": {"databaseName": "InventorySync-%s"}\n}' "$time" > testing.json     
+           printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "$time" > testing.json     
            cat testing.json
            cd ..
-           pwd
-           cat realm_config.json
-           echo "About to realm_config.json"
            sed -i txt 's/{/{ "environment": "testing",/' realm_config.json 
-           cat realm_config.json
 # Adding --realm-url and --atlas-url to login command to workaround authentication error           
     - name: "Install the Realm CLI & authenticate (generic api key)"
       if: ${{ env.REALM_APP_ID }}
