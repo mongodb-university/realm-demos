@@ -49,20 +49,20 @@ jobs:
     - name: "Create a new Realm app for pull requests where the Realm app does not yet exist"
       if: ${{ !env.REALM_APP_ID }}
       run: |
-           echo "The env variable is not set"
            cd inventory/export/sync
            realm-cli import -y
            output=$(realm-cli app describe)
-           echo "$output"
            app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
-           echo "$app_id"
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
-           echo "IS_TESTING_APP=true" >> $GITHUB_ENV
+           echo "IS_DYNAMICALLY_GENERATED_APP=true" >> $GITHUB_ENV
     - name: "Build mobile app & run tests"
       run: |
-           echo ${{ env.REALM_APP_ID }}
-           echo ${{ env.IS_TESTING_APP }}
            echo "the realm app id is: $REALM_APP_ID"
            cd inventory/clients/ios-swiftui/InventoryDemo
            xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' test
-# TODO: Delete apps where IS_TESTING_APP
+# Could choose to skip deleting apps where tests fail so you could manually investigate
+    - name: "Delete dynamically generated Realm app"
+      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
+      run: realm-cli app delete -a $REALM_APP_ID
+      
+
