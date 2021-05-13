@@ -40,7 +40,7 @@ jobs:
            time=$(date +%s%N)
            printf '{\n     "values": {"databaseName": "InventorySync-%s"}\n}' "$time" > testing.json     
            cat testing.json
-           cd inventory/export/sync/
+           cd ..
            pwd
            cat realm_config.json
            echo "About to realm_config.json"
