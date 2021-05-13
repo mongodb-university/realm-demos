@@ -57,14 +57,11 @@ jobs:
            app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
            echo "$app_id"
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
-           echo ${{ env.REALM_APP_ID }}
-           echo "REALM_APP_ID=${{ env.REALM_APP_ID }}" >> $GITHUB_ENV
-           echo ${{ env.REALM_APP_ID }}
            echo "IS_TESTING_APP=true" >> $GITHUB_ENV
-           echo ${{ env.IS_TESTING_APP }}
     - name: "Build mobile app & run tests"
       run: |
            echo ${{ env.REALM_APP_ID }}
+           echo ${{ env.IS_TESTING_APP }}
            echo "the realm app id is: $REALM_APP_ID"
            cd inventory/clients/ios-swiftui/InventoryDemo
            xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' test
