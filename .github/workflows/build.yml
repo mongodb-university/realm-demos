@@ -71,12 +71,23 @@ jobs:
 #       run: realm-cli app delete -a $REALM_APP_ID
 
 # TODO: test that this doesn't run if tests fail
-    - name: "Push commits to the Main branch"
-      if: ${{ github.ref == 'refs/heads/staging' }}
+    # - name: "Push commits to the Main branch"
+    #   if: ${{ github.ref == 'refs/heads/staging' }}
+    #   run: |
+    #        git branch
+    #        git remote show origin
+    #        git checkout main;
+    #        git merge origin/staging;
+    #        git push origin main;
+  pushToProdBranch:
+    runs-on: macos-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
       run: |
            git branch
            git remote show origin
-           git checkout main;
-           git merge origin/staging;
-           git push origin main;
-
+           git merge origin/staging
+           git push
