@@ -17,12 +17,12 @@ jobs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: | 
            echo "REALM_APP_ID=inventorysync-ctnnu" >> $GITHUB_ENV
-           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
+#           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
     - name: "Are we pushing to the Staging branch?"
       if: ${{ github.ref == 'refs/heads/staging' }}
       run: | 
            echo "REALM_APP_ID=inventorydemo-staging-zahjj" >> $GITHUB_ENV
-           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
+#           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
 # For Pull Requests, update the database name to be a unique name based on the current date and time
 # Also, set the environment to be the Testing envrionment
     - name: "Set environment variables for pull requests"
@@ -43,7 +43,7 @@ jobs:
 # Making these separate steps since specifying the project id isn't working so we need to use separate API keys
 # Need to think through splitting this for Dev pushes
     - name: "Authenticate to the Realm CLI (Testing Project API key)"
-      if: ${{ IS_DYNAMICALLY_GENERATED_APP }}
+      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
       run: realm-cli login --api-key="${{ secrets.REALM_API_TESTING_PROJECT_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_TESTING_PROJECT_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
     - name: "Push updated copy of the Realm app (Staging or Main branch)"
       if: ${{ env.REALM_APP_ID }}
@@ -51,7 +51,7 @@ jobs:
            cd inventory/export/sync
            realm-cli push --remote="${{ env.REALM_APP_ID }}"
     - name: "Create a new Realm app for pull requests"
-      if: ${{ IS_DYNAMICALLY_GENERATED_APP }}
+      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
       run: |
            cd inventory/export/sync
            realm-cli import -y
