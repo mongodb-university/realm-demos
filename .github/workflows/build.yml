@@ -73,5 +73,11 @@ jobs:
 # TODO: test that this doesn't run if tests fail
     - name: "Push commits to the Main branch"
       if: ${{ github.ref == 'refs/heads/staging' }}
-      run: git push origin main
+      run: |
+      git branch
+      git remote show origin
+#      git push origin main
+      git checkout master;
+      git merge origin/staging;
+      git push origin master;
 
