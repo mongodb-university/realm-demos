@@ -86,6 +86,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: main
+        fetch-depth: 0
     - name: "Push to the Main branch"
       run: |
            git branch
