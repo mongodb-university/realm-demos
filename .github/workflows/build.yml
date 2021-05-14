@@ -17,10 +17,12 @@ jobs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: | 
            echo "REALM_APP_ID=inventorysync-ctnnu" >> $GITHUB_ENV
+           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
     - name: "Are we pushing to the Staging branch?"
       if: ${{ github.ref == 'refs/heads/staging' }}
       run: | 
            echo "REALM_APP_ID=inventorydemo-staging-zahjj" >> $GITHUB_ENV
+           echo "IS_DYNAMICALLY_GENERATED_APP=false" >> $GITHUB_ENV
 # For Pull Requests, update the database name to be a unique name based on the current date and time
 # Also, set the environment to be the Testing envrionment
     - name: "Set environment variables for pull requests"
