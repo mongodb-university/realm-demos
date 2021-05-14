@@ -49,12 +49,12 @@ jobs:
       if: ${{ env.REALM_APP_ID }}
       run: | 
            cd inventory/export/sync
-           realm-cli push --remote="${{ env.REALM_APP_ID }}"
+           realm-cli push --remote="${{ env.REALM_APP_ID }}" -y
     - name: "Create a new Realm app for pull requests"
       if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
       run: |
            cd inventory/export/sync
-           realm-cli import -y
+           realm-cli push -y
            output=$(realm-cli app describe)
            app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
