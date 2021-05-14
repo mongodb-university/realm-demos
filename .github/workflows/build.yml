@@ -79,7 +79,7 @@ jobs:
       with:
         ref: main
         fetch-depth: 0
-        token: ${{ env.PERSONAL_ACCESS_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
     - name: "Push to the Main branch"
       run: |
            git merge origin/staging
