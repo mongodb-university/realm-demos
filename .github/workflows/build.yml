@@ -74,10 +74,10 @@ jobs:
     - name: "Push commits to the Main branch"
       if: ${{ github.ref == 'refs/heads/staging' }}
       run: |
-      git branch
-      git remote show origin
+           git branch
+           git remote show origin
 #      git push origin main
-      git checkout master;
-      git merge origin/staging;
-      git push origin master;
+           git checkout master;
+           git merge origin/staging;
+           git push origin master;
 
