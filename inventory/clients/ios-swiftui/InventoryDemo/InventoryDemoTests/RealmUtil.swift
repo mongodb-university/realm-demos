@@ -14,7 +14,17 @@ enum RealmUtil {
     
     static func initRealm() -> Realm? {
         do {
-            let realm = try Realm()
+            let configuration = Realm.Configuration(fileURL: nil,
+                                                    inMemoryIdentifier: "test-realm",
+                                                    syncConfiguration: nil,
+                                                    encryptionKey: nil,
+                                                    readOnly: false,
+                                                    schemaVersion: 0,
+                                                    migrationBlock: nil,
+                                                    deleteRealmIfMigrationNeeded: true,
+                                                    shouldCompactOnLaunch: nil,
+                                                    objectTypes: nil)
+            let realm = try Realm(configuration: configuration)
             return realm
         } catch {
             fatalError("Something bad happened: \(error)")
