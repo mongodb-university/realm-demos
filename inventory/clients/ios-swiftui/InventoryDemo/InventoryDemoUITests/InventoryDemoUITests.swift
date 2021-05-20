@@ -34,4 +34,18 @@ class InventoryDemoUITests: XCTestCase {
         XCTAssertTrue(startButton.isEnabled)
         startButton.tap()
     }
+    
+    func testAddEmail() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        // Use recording to get started writing UI tests.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+                           
+        let emailText = app.textFields["email_input"]
+        XCTAssertTrue(emailText.waitForExistence(timeout: 1))
+        emailText.tap()
+        emailText.typeText("testemail@realm.com")
+        XCTAssertEqual(emailText.value as! String, "testemail@realm.com")
+    }
 }

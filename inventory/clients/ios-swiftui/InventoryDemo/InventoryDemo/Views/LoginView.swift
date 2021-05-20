@@ -20,6 +20,7 @@ struct LoginView: View {
         VStack {
             Spacer()
             InputField(title: "Email", text: $email)
+                .accessibility(identifier: "email_input")
             InputField(title: "Password", text: $password, showingSecureField: true)
             InputField(title: "Store", text: $userStore)
             CallToActionButton(

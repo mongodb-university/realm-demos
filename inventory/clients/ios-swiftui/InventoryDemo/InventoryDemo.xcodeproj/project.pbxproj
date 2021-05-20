@@ -29,7 +29,6 @@
 		9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992470492655249D0015C42E /* ContentViewTests.swift */; };
 		997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E5A2D2654150E00CB004F /* RealmUtil.swift */; };
 		997E5A3126541D8300CB004F /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 997E5A3026541D8300CB004F /* ViewInspector */; };
-		997E5A3326541DAA00CB004F /* LoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E5A3226541DAA00CB004F /* LoginViewTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +74,6 @@
 		0A2F0D0C2630661900CEC71B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		992470492655249D0015C42E /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		997E5A2D2654150E00CB004F /* RealmUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUtil.swift; sourceTree = "<group>"; };
-		997E5A3226541DAA00CB004F /* LoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,7 +150,6 @@
 			children = (
 				997E5A2D2654150E00CB004F /* RealmUtil.swift */,
 				0A2F0CD72630126000CEC71B /* InventoryItemTests.swift */,
-				997E5A3226541DAA00CB004F /* LoginViewTests.swift */,
 				992470492655249D0015C42E /* ContentViewTests.swift */,
 				0A2F0CD92630126000CEC71B /* Info.plist */,
 			);
@@ -363,7 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A2F0CD82630126000CEC71B /* InventoryItemTests.swift in Sources */,
-				997E5A3326541DAA00CB004F /* LoginViewTests.swift in Sources */,
 				9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */,
 				997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */,
 			);
