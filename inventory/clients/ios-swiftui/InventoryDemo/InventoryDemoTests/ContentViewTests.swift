@@ -30,3 +30,4 @@ class ContentViewTests: XCTestCase {
 
 extension ContentView: Inspectable {}
 extension InventoryView: Inspectable {}
+extension LoginView: Inspectable {}
