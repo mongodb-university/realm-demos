@@ -11,9 +11,13 @@ import RealmSwift
 
 class InventoryDemoTests: XCTestCase {
 
+    // get in-memory Realm
     let realm: Realm? = RealmUtil.initRealm()
 
     func testRealmInitCorrectly() throws {
+        // Given a Realm
+
+        // Then it should not be nil
         XCTAssertNotNil(realm)
     }
     
@@ -31,14 +35,17 @@ class InventoryDemoTests: XCTestCase {
     }
     
     func testCanSaveInventoryItem() {
+        // Given a Realm and an InventoryItem
         let item = InventoryItem("some item")
         item.price = 10
         
+        // When we insert a new Item
         do {
             try realm?.write {
                 realm?.add(item)
             }
         } catch {
+            // Then it shouldn't fail inserting
             XCTFail("Error writing: \(error)")
         }
     }
@@ -68,7 +75,7 @@ class InventoryDemoTests: XCTestCase {
         XCTAssertEqual(allInventoryItems?.count, 10)
     }
     
-    // MARK: - Utilities
+    // MARK: - Testing Utilities
     
     // inserts n Inventory Items
     private func insertInventoryItems(_ n: Int) {
@@ -90,6 +97,7 @@ class InventoryDemoTests: XCTestCase {
         }
     }
     
+    // deletes all Inventory Items
     private func deleteAllInventoryItems() {
         let allInventoryItems = realm?.objects(InventoryItem.self)
         try! realm?.write {

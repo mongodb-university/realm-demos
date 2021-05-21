@@ -23,29 +23,37 @@ class InventoryDemoUITests: XCTestCase {
     }
 
     func testClickLoginButton() throws {
+        // start the app in Simulator
         let app = XCUIApplication()
         app.launch()
-
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
                            
+        // search for a button with title "Log In"
         let startButton = app.buttons["Log In"]
+        
+        // should be on screen, and enabled
         XCTAssertTrue(startButton.waitForExistence(timeout: 1))
         XCTAssertTrue(startButton.isEnabled)
+        
+        // tap the button!
         startButton.tap()
     }
     
     func testAddEmail() throws {
+        // start the app in Simulator
         let app = XCUIApplication()
         app.launch()
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-                           
+        // search for a text field with accessible identifier "email_input"
         let emailText = app.textFields["email_input"]
+        
+        // should be on screen
         XCTAssertTrue(emailText.waitForExistence(timeout: 1))
+        
+        // we tap on it, fill in some text
         emailText.tap()
         emailText.typeText("testemail@realm.com")
+        
+        // text should be there!
         XCTAssertEqual(emailText.value as! String, "testemail@realm.com")
     }
 }
