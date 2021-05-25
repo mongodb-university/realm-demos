@@ -8,9 +8,9 @@
 import SwiftUI
 import RealmSwift
 
-//let app = RealmSwift.App(id: "inventorysync-xxxx") // TODO: Set the Realm application ID
-let appId = ProcessInfo.processInfo.environment["REALM_APP_ID"]
-let app = RealmSwift.App(id: appId!)
+let (success, filecontent) = readFile(named: "realm-app-id.txt")
+
+let app = RealmSwift.App(id: success ? filecontent: "Couldn't read secrets file. Is there?" )
 var store = "101"
 
 @main
