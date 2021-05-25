@@ -11,7 +11,7 @@
 		0A2F0CC82630125D00CEC71B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CC72630125D00CEC71B /* ContentView.swift */; };
 		0A2F0CCA2630125F00CEC71B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F0CC92630125F00CEC71B /* Assets.xcassets */; };
 		0A2F0CCD2630125F00CEC71B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F0CCC2630125F00CEC71B /* Preview Assets.xcassets */; };
-		0A2F0CD82630126000CEC71B /* InventoryDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CD72630126000CEC71B /* InventoryDemoTests.swift */; };
+		0A2F0CD82630126000CEC71B /* InventoryItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CD72630126000CEC71B /* InventoryItemTests.swift */; };
 		0A2F0CE32630126000CEC71B /* InventoryDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CE22630126000CEC71B /* InventoryDemoUITests.swift */; };
 		0A2F0CF42630138300CEC71B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2F0CF32630138300CEC71B /* RealmSwift */; };
 		0A2F0CF62630138300CEC71B /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2F0CF52630138300CEC71B /* Realm */; };
@@ -26,6 +26,9 @@
 		0A2F0D092630292600CEC71B /* CountStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D082630292600CEC71B /* CountStepper.swift */; };
 		0A2F0D0B263041D200CEC71B /* PriceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D0A263041D200CEC71B /* PriceInput.swift */; };
 		0A2F0D0D2630661900CEC71B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D0C2630661900CEC71B /* AddItemView.swift */; };
+		9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992470492655249D0015C42E /* ContentViewTests.swift */; };
+		997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E5A2D2654150E00CB004F /* RealmUtil.swift */; };
+		997E5A3126541D8300CB004F /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 997E5A3026541D8300CB004F /* ViewInspector */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +56,7 @@
 		0A2F0CCC2630125F00CEC71B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0A2F0CCE2630125F00CEC71B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A2F0CD32630126000CEC71B /* InventoryDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventoryDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0A2F0CD72630126000CEC71B /* InventoryDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDemoTests.swift; sourceTree = "<group>"; };
+		0A2F0CD72630126000CEC71B /* InventoryItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryItemTests.swift; sourceTree = "<group>"; };
 		0A2F0CD92630126000CEC71B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A2F0CDE2630126000CEC71B /* InventoryDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventoryDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A2F0CE22630126000CEC71B /* InventoryDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDemoUITests.swift; sourceTree = "<group>"; };
@@ -69,6 +72,8 @@
 		0A2F0D082630292600CEC71B /* CountStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountStepper.swift; sourceTree = "<group>"; };
 		0A2F0D0A263041D200CEC71B /* PriceInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceInput.swift; sourceTree = "<group>"; };
 		0A2F0D0C2630661900CEC71B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
+		992470492655249D0015C42E /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
+		997E5A2D2654150E00CB004F /* RealmUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				997E5A3126541D8300CB004F /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +148,9 @@
 		0A2F0CD62630126000CEC71B /* InventoryDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				0A2F0CD72630126000CEC71B /* InventoryDemoTests.swift */,
+				997E5A2D2654150E00CB004F /* RealmUtil.swift */,
+				0A2F0CD72630126000CEC71B /* InventoryItemTests.swift */,
+				992470492655249D0015C42E /* ContentViewTests.swift */,
 				0A2F0CD92630126000CEC71B /* Info.plist */,
 			);
 			path = InventoryDemoTests;
@@ -229,6 +237,9 @@
 				0A2F0CD52630126000CEC71B /* PBXTargetDependency */,
 			);
 			name = InventoryDemoTests;
+			packageProductDependencies = (
+				997E5A3026541D8300CB004F /* ViewInspector */,
+			);
 			productName = InventoryDemoTests;
 			productReference = 0A2F0CD32630126000CEC71B /* InventoryDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -284,6 +295,7 @@
 			mainGroup = 0A2F0CB92630125D00CEC71B;
 			packageReferences = (
 				0A2F0CF22630138300CEC71B /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+				997E5A2F26541D8300CB004F /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			productRefGroup = 0A2F0CC32630125D00CEC71B /* Products */;
 			projectDirPath = "";
@@ -347,7 +359,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A2F0CD82630126000CEC71B /* InventoryDemoTests.swift in Sources */,
+				0A2F0CD82630126000CEC71B /* InventoryItemTests.swift in Sources */,
+				9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */,
+				997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +440,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -481,7 +495,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -669,6 +683,14 @@
 				minimumVersion = 10.7.6;
 			};
 		};
+		997E5A2F26541D8300CB004F /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -681,6 +703,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A2F0CF22630138300CEC71B /* XCRemoteSwiftPackageReference "realm-cocoa" */;
 			productName = Realm;
+		};
+		997E5A3026541D8300CB004F /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 997E5A2F26541D8300CB004F /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
