@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ main, staging, unit-tests-swiftui ]
+    branches: [ main, staging ]
   pull_request:
     branches: [ staging ]
 
