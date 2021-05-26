@@ -50,7 +50,6 @@ jobs:
            echo "IS_DYNAMICALLY_GENERATED_APP=true" >> $GITHUB_ENV
 
     - name: "Create realm-app-id.txt secrets file"
-      if: ${{ !env.REALM_APP_ID }}
       run: | 
            # Add a secrets file in for the INventoryDemoApp
            echo `pwd`
