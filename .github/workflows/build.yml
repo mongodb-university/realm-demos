@@ -49,6 +49,11 @@ jobs:
            # a dynamically generated app (we aren't updating the existing Staging or Production apps)
            echo "IS_DYNAMICALLY_GENERATED_APP=true" >> $GITHUB_ENV
 
+           # Add a secrets file in for the INventoryDemoApp
+           echo `pwd`
+           echo "IS_DYNAMICALLY_GENERATED_APP=true" >>  $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
+
+
 # INSTALL THE REALM-CLI AND AUTHENTICATE
 
 # For more information on the MongoDB Realm CLI, 
