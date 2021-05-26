@@ -53,22 +53,11 @@ jobs:
 
 # For more information on the MongoDB Realm CLI, 
 # see https://docs.mongodb.com/realm/deploy/realm-cli-reference/
-    - name: "Install the Realm CLI"
-      run: npm install -g mongodb-realm-cli@beta
-
-# Creating two separate authentication steps since specifying the project id 
-# isn't working so we need to use separate API keys
-# for dynamically generated apps vs the static Staging and Production apps
-# Need to think through splitting this for Dev pushes
-
-# Adding --realm-url and --atlas-url to login command to workaround authentication error           
-    - name: "Authenticate to the Realm CLI (using generic API key)"
-      if: ${{ env.REALM_APP_ID }}
-      run: realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
-
-    - name: "Authenticate to the Realm CLI (using API key for Testing Project)"
-      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
-      run: realm-cli login --api-key="${{ secrets.REALM_API_TESTING_PROJECT_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_TESTING_PROJECT_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
+# Adding --realm-url and --atlas-url to login command to workaround authentication error  
+    - name: "Install the Realm CLI & authenticate"
+      run: |
+           npm install -g mongodb-realm-cli@beta
+           realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
 
 # PUSH THE REALM APP
 
@@ -82,18 +71,17 @@ jobs:
       if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
       run: |
            cd inventory/export/sync
-           realm-cli push -y
+           realm-cli push -y --project 609c100ae9974e12169e2480
 
            # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
            output=$(realm-cli app describe)
            app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
 
-    - name: "Create realm-app-id.txt secrets file"
-      run: | 
-           # Add a secrets file in for the INventoryDemoApp
-           echo `pwd`
-           echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
+# STORE THE REALM APP ID IN THE MOBILE APP CODE
+
+    - name: "Create realm-app-id.txt that stores the Realm app ID"
+      run: echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
 
 # RUN TESTS
 
@@ -106,7 +94,7 @@ jobs:
            cd inventory/clients/ios-swiftui/InventoryDemo
 
            # Build the app for testing
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' build-for-testing
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' build-for-testing
 
            # Define the simulators that will be used for testing
            iPhone12Pro='platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4'
@@ -115,9 +103,9 @@ jobs:
 
            # Run the tests on a variety of simulators
            # Optionally, could put these in separate jobs to run in parallel
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12Pro" -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' test-without-building
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12" -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' test-without-building     
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPadPro4" -derivedDataPath './output' REALM_APP_ID='${{ env.REALM_APP_ID }}' test-without-building
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12Pro" -derivedDataPath './output' test-without-building
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12" -derivedDataPath './output' test-without-building     
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPadPro4" -derivedDataPath './output' test-without-building
 
 # ARCHIVE THE APP (ONLY FOR PUSHES TO THE MAIN BRANCH)
 
@@ -163,8 +151,7 @@ jobs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
            cd inventory/clients/ios-swiftui/InventoryDemo
-           echo ${{ env.REALM_APP_ID }}
-           xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive REALM_APP_ID=${{ env.REALM_APP_ID }} -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
+           xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
            xcodebuild -exportArchive -archivePath $PWD/build/ci.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/build/ci.xcarchive/Info.plist
 
 # If we are pushing to the main branch (meaning we are pushing to production),
