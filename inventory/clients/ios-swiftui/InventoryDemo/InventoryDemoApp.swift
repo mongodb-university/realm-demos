@@ -8,9 +8,12 @@
 import SwiftUI
 import RealmSwift
 
-//let app = RealmSwift.App(id: "inventorysync-xxxx") // TODO: Set the Realm application ID
-let appId = ProcessInfo.processInfo.environment["REALM_APP_ID"]
-let app = RealmSwift.App(id: appId!)
+// Important: you must create a text file in the root folder of this project (where the InventoryDemo.xcproject is)
+// called "realm-app-id.txt" and put inside a line with the realm app id you've created
+// that id will look like myappsync-xxxxx
+let (success, filecontent) = readFile(named: "realm-app-id.txt")
+
+let app = RealmSwift.App(id: success ? filecontent: "Couldn't read secrets file. Is there?" )
 var store = "101"
 
 @main

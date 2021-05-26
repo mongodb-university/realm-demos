@@ -89,6 +89,12 @@ jobs:
            app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
 
+    - name: "Create realm-app-id.txt secrets file"
+      run: | 
+           # Add a secrets file in for the INventoryDemoApp
+           echo `pwd`
+           echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
+
 # RUN TESTS
 
 # Build the app for testing and then run the tests using a variety of simulators

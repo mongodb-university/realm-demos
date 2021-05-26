@@ -26,6 +26,8 @@
 		0A2F0D092630292600CEC71B /* CountStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D082630292600CEC71B /* CountStepper.swift */; };
 		0A2F0D0B263041D200CEC71B /* PriceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D0A263041D200CEC71B /* PriceInput.swift */; };
 		0A2F0D0D2630661900CEC71B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D0C2630661900CEC71B /* AddItemView.swift */; };
+		9920FC92265D54FC001B9A05 /* realm-app-id.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9920FC91265D54FC001B9A05 /* realm-app-id.txt */; };
+		9920FC95265D5553001B9A05 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920FC94265D5553001B9A05 /* File.swift */; };
 		9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992470492655249D0015C42E /* ContentViewTests.swift */; };
 		997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E5A2D2654150E00CB004F /* RealmUtil.swift */; };
 		997E5A3126541D8300CB004F /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 997E5A3026541D8300CB004F /* ViewInspector */; };
@@ -72,6 +74,8 @@
 		0A2F0D082630292600CEC71B /* CountStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountStepper.swift; sourceTree = "<group>"; };
 		0A2F0D0A263041D200CEC71B /* PriceInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceInput.swift; sourceTree = "<group>"; };
 		0A2F0D0C2630661900CEC71B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
+		9920FC91265D54FC001B9A05 /* realm-app-id.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "realm-app-id.txt"; sourceTree = "<group>"; };
+		9920FC94265D5553001B9A05 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		992470492655249D0015C42E /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		997E5A2D2654150E00CB004F /* RealmUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +111,7 @@
 		0A2F0CB92630125D00CEC71B = {
 			isa = PBXGroup;
 			children = (
+				9920FC91265D54FC001B9A05 /* realm-app-id.txt */,
 				0A2F0CC52630125D00CEC71B /* InventoryDemoApp.swift */,
 				0A2F0CC42630125D00CEC71B /* InventoryDemo */,
 				0A2F0CD62630126000CEC71B /* InventoryDemoTests */,
@@ -128,6 +133,7 @@
 		0A2F0CC42630125D00CEC71B /* InventoryDemo */ = {
 			isa = PBXGroup;
 			children = (
+				9920FC93265D5546001B9A05 /* Utils */,
 				0A2F0CF1263012E000CEC71B /* Models */,
 				0A2F0CF0263012D300CEC71B /* Views */,
 				0A2F0CC92630125F00CEC71B /* Assets.xcassets */,
@@ -197,6 +203,14 @@
 				0A2F0D082630292600CEC71B /* CountStepper.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		9920FC93265D5546001B9A05 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9920FC94265D5553001B9A05 /* File.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -313,6 +327,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9920FC92265D54FC001B9A05 /* realm-app-id.txt in Resources */,
 				0A2F0CCD2630125F00CEC71B /* Preview Assets.xcassets in Resources */,
 				0A2F0CCA2630125F00CEC71B /* Assets.xcassets in Resources */,
 			);
@@ -348,6 +363,7 @@
 				0A2F0D05263022EE00CEC71B /* InventoryView.swift in Sources */,
 				0A2F0D0B263041D200CEC71B /* PriceInput.swift in Sources */,
 				0A2F0CC82630125D00CEC71B /* ContentView.swift in Sources */,
+				9920FC95265D5553001B9A05 /* File.swift in Sources */,
 				0A2F0CFA26301C2700CEC71B /* LoginView.swift in Sources */,
 				0A2F0CFF26301CEE00CEC71B /* CaptionLabel.swift in Sources */,
 				0A2F0CFD26301CC900CEC71B /* InputField.swift in Sources */,
@@ -510,9 +526,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"InventoryDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InventoryDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -520,8 +537,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.iOSInventoryDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com..dfreniche.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -532,9 +550,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"InventoryDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InventoryDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -542,8 +561,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.iOSInventoryDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com..dfreniche.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -554,8 +574,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				INFOPLIST_FILE = InventoryDemoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -565,6 +587,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.InventoryDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InventoryDemo.app/InventoryDemo";
@@ -576,8 +600,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				INFOPLIST_FILE = InventoryDemoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -587,6 +613,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.InventoryDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InventoryDemo.app/InventoryDemo";
@@ -597,16 +625,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				INFOPLIST_FILE = InventoryDemoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.InventoryDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..dfreniche.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = InventoryDemo;
@@ -617,16 +649,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CV5PJSAH7N;
+				DEVELOPMENT_TEAM = BGTGP4V6AC;
 				INFOPLIST_FILE = InventoryDemoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.clusterdb.InventoryDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..dfreniche.clusterdb.iOSInventoryDemo;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com..dfreniche.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = InventoryDemo;
