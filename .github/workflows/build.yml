@@ -20,7 +20,7 @@ jobs:
       run: echo "CURRENT_TIME=$(date +'%Y-%m-%d_%s')" >> $GITHUB_ENV
 
     - name: "Is this a push to the Main branch?"
-# Diego if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: echo "REALM_APP_ID=inventorysync-ctnnu" >> $GITHUB_ENV
 
     - name: "Is this a push to the Staging branch?"
@@ -129,7 +129,7 @@ jobs:
 # at https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development 
 # CC-BY Attribution 4.0 International License: https://github.com/github/docs/blob/main/LICENSE    
     - name: "Install the Apple certificate and provisioning profile (so we can create the archive)"
-# Diego if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -161,7 +161,7 @@ jobs:
 # If we are pushing to the main branch (meaning we are pushing to production),
 # create the mobile app archive (.ipa file)
     - name: "Archive the mobile app"
-# Diego if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: |
            cd inventory/clients/ios-swiftui/InventoryDemo
            echo ${{ env.REALM_APP_ID }}
@@ -173,7 +173,7 @@ jobs:
 # Alternatively, you could upload the app directly for beta testing and/or release
     - name: "Store the Archive in a GitHub Release"
       uses: softprops/action-gh-release@v1
-# Diego if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
           files: |
             inventory/clients/ios-swiftui/InventoryDemo/build/InventoryDemo.ipa
