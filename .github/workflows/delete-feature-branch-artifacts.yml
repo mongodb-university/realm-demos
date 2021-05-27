@@ -3,12 +3,11 @@ name: "Delete feature branch artifacts upon branch deletion"
 # RUN THIS WORKFLOW WHEN ANY BRANCH BESIDES MAIN OR STAGING IS DELETED
 on: 
   delete:
-    branches:
-      - '*'
-      - '!main'
-      - '!staging'
-      - '!my-fake-branch'
-
+    branches-ignore:
+      - 'main'
+      - 'staging'
+      - 'my-fake-branch'
+ 
 jobs:    
   deleteArtifacts:
     if: github.event.ref_type == 'branch'
