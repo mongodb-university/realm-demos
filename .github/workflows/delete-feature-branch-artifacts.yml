@@ -10,7 +10,8 @@ on:
       - '!my-fake-branch'
 
 jobs:    
-  build:
+  deleteArtifacts:
+    if: github.event.ref_type == 'branch'
     runs-on: macos-latest
     steps:
 
@@ -27,7 +28,7 @@ jobs:
     - name: "Store the name of the branch"
       run: | 
 
-           ref=$(echo ${{ github.ref }})
+           ref=$(echo ${{ github.event.ref }})
            branch=$(echo "${ref##*/}")
            echo "FEATURE_BRANCH=$branch" >> $GITHUB_ENV
 
