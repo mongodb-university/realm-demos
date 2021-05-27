@@ -33,6 +33,7 @@ jobs:
            echo "FEATURE_BRANCH=$branch" >> $GITHUB_ENV
 
            # Check if a Realm app already exists for this feature branch
+           # Note: this requires the IP address of the GitHub Actions vm to be in the Atlas access list  
            output=$(mongo "mongodb+srv://${{ secrets.ATLAS_URI_FEATURE_BRANCHES }}/GitHubActionsMetadata" --username ${{ secrets.ATLAS_USERNAME_FEATURE_BRANCHES }} --password ${{ secrets.ATLAS_PASSWORD_FEATURE_BRANCHES }} --eval "db.metadata.findOne({'branch': '$branch'})")
 
            if [[ $output == *null ]]; then
@@ -43,14 +44,14 @@ jobs:
               echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
            fi
 
-           # Update the databaseName in the testing.json environment file
+           # Update the databaseName in the development.json environment file
            # Set the database name to contain the branch name to ensure it's unique
            cd inventory/export/sync/environments
-           printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "$branch" > testing.json     
-           
-           # Indicate that the Realm app should use the Testing environment by updating realm_config.json
+           printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "$branch" > development.json     
+
+           # Indicate that the Realm app should use the development environment by updating realm_config.json
            cd ..
-           sed -i txt 's/{/{ "environment": "testing",/' realm_config.json
+           sed -i txt 's/{/{ "environment": "development",/' realm_config.json
 
 # For Pull Requests, create a new Realm app with a new database
 # The Realm app will be stored in an Atlas project used only for CI/CD
@@ -107,6 +108,7 @@ jobs:
            echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
 
            # Store the Realm App ID in the GitHubActionsMetadata database
+           # Note: this requires the IP address of the GitHub Actions vm to be in the Atlas access list  
            mongo "mongodb+srv://${{ secrets.ATLAS_URI_FEATURE_BRANCHES }}/GitHubActionsMetadata" --username ${{ secrets.ATLAS_USERNAME_FEATURE_BRANCHES }} --password ${{ secrets.ATLAS_PASSWORD_FEATURE_BRANCHES }} --eval "db.metadata.insertOne({'branch': '${{ env.FEATURE_BRANCH}}', 'realm_app_id': '$app_id'})"
 
     - name: "Create a new Realm app for pull requests"
@@ -216,21 +218,16 @@ jobs:
 # If a Realm app was dynamically generated, delete the app and its associated database
 # Alternatively, you could choose to skip deleting apps and their databases when
 # the tests fail to allow for manual investigation
-# Note: this step is currently NOT working due to a bug in the realm-cli:
-# https://jira.mongodb.org/browse/REALMC-8645
-    # - name: "Delete dynamically generated Realm app"
-    #   if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
-    #   run: realm-cli app delete -a $REALM_APP_ID
+    - name: "Delete dynamically generated Realm app"
+      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
+      run: realm-cli app delete --app ${{ env.REALM_APP_ID }}
 
 # Delete the database associated with the Realm app
-# TODO: The database is appearing a few minutes after app creation, which I think is due
-# to the sync taking a couple of minutes to get setup. I'm wondering if this problem will
-# go away if we delete the app first
-# Note: this requires the IP address of the GitHub action vm to be in the Atlas access list   
-    # - name: "Delete dynamically generated database"
-    #   if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
-    #   run: |
-    #        mongo "mongodb+srv://${{ secrets.ATLAS_URI }}/InventoryDemo-${{ env.CURRENT_TIME }}" --username ${{ secrets.ATLAS_USERNAME }} --password ${{ secrets.ATLAS_PASSWORD }} --eval "db.dropDatabase()"
+# Note: this requires the IP address of the GitHub Actions vm to be in the Atlas access list   
+    - name: "Delete dynamically generated database"
+      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
+      run: |
+           mongo "mongodb+srv://${{ secrets.ATLAS_URI_PULL_REQUESTS }}/InventoryDemo-${{ env.CURRENT_TIME }}" --username ${{ secrets.ATLAS_USERNAME_PULL_REQUESTS }} --password ${{ secrets.ATLAS_PASSWORD_PULL_REQUESTS }} --eval "db.dropDatabase()"
 
 # AUTOMATICALLY PUSH COMMITS FROM STAGING BRANCH TO MAIN BRANCH  
 
