@@ -24,7 +24,7 @@ jobs:
       run: echo "REALM_APP_ID=inventorydemo-staging-zahjj" >> $GITHUB_ENV
 
     - name: "Is this a push to a feature branch?"
-      if: ${{ !env.REALM_APP_ID }} && ${{ github.event_name == 'push' }}
+      if: ${{ !env.REALM_APP_ID && github.event_name == 'push' }}
       run: | 
 
            # Create a new environment variable to store the name of the feature branch
