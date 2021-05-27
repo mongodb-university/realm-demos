@@ -1,10 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches: [ main, staging ]
-  pull_request:
-    branches: [ staging ]
+on: [push, pull_request]
 
 jobs:    
   build:
@@ -27,14 +23,47 @@ jobs:
       if: ${{ github.ref == 'refs/heads/staging' }}
       run: echo "REALM_APP_ID=inventorydemo-staging-zahjj" >> $GITHUB_ENV
 
+    - name: "Is this a push to a feature branch?"
+      if: ${{ !env.REALM_APP_ID }} && ${{ github.event_name == 'push' }}
+      run: | 
+
+           # Create a new environment variable to store the name of the feature branch
+           ref=$(echo ${{ github.ref }})
+           branch=$(echo "${ref##*/}")
+           echo "FEATURE_BRANCH=$branch" >> $GITHUB_ENV
+
+           # Check if a Realm app already exists for this feature branch
+           output=$(mongo "mongodb+srv://${{ secrets.ATLAS_URI_FEATURE_BRANCHES }}/GitHubActionsMetadata" --username ${{ secrets.ATLAS_USERNAME_FEATURE_BRANCHES }} --password ${{ secrets.ATLAS_PASSWORD_FEATURE_BRANCHES }} --eval "db.metadata.findOne({'branch': '$branch'})")
+
+           if [[ $output == *null ]]; then
+              echo "No Realm app found for this branch. A new app will be pushed later in this workflow"
+           else
+              echo "A Realm app was found for this branch. Updates will be pushed to the existing app later in this workflow"
+              app_id=$(echo $output | sed 's/^.*realm_app_id" : "\([^"]*\).*/\1/')
+              echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
+           fi
+
+           # Update the databaseName in the testing.json environment file
+           # Set the database name to contain the branch name to ensure it's unique
+           cd inventory/export/sync/environments
+           printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "$branch" > testing.json     
+           
+           # Indicate that the Realm app should use the Testing environment by updating realm_config.json
+           cd ..
+           sed -i txt 's/{/{ "environment": "testing",/' realm_config.json
+
 # For Pull Requests, create a new Realm app with a new database
 # The Realm app will be stored in an Atlas project used only for CI/CD
 # The Realm app should use the Testing environment
 # For more information on Realm environments, 
 # see https://docs.mongodb.com/realm/values-and-secrets/define-environment-values/
     - name: "Set environment variables for all other runs"
-      if: ${{ !env.REALM_APP_ID }}
+      if: ${{ github.event_name == 'pull_request' }}
       run: | 
+
+           # Create a new environment variable named IS_DYNAMICALLY_GENERATED_APP to indicate this is
+           # a dynamically generated app that should be deleted later in this workflow
+           echo "IS_DYNAMICALLY_GENERATED_APP=true" >> $GITHUB_ENV
            
            # Update the databaseName in the testing.json environment file
            # Set the database name to contain the current time to ensure it's unique
@@ -44,10 +73,7 @@ jobs:
            # Indicate that the Realm app should use the Testing environment by updating realm_config.json
            cd ..
            sed -i txt 's/{/{ "environment": "testing",/' realm_config.json 
-
-           # Create a new environment variable named IS_DYNAMICALLY_GENERATED_APP to indicate this is
-           # a dynamically generated app (we aren't updating the existing Staging or Production apps)
-           echo "IS_DYNAMICALLY_GENERATED_APP=true" >> $GITHUB_ENV
+           
 
 # INSTALL THE REALM-CLI AND AUTHENTICATE
 
@@ -61,15 +87,33 @@ jobs:
 
 # PUSH THE REALM APP
 
-    - name: "Push updated copy of the Realm app (Staging or Main branch)"
+    - name: "Push updated copy of the Realm app for existing apps (Main, Staging, or Feature branches)"
       if: ${{ env.REALM_APP_ID }}
       run: | 
            cd inventory/export/sync
            realm-cli push --remote="${{ env.REALM_APP_ID }}" -y
 
+    - name: "Create a new Realm app for feature branches where the Realm app does not yet exist"
+      if: ${{ env.REALM_APP_ID == null && github.event_name == 'push' }}
+      run: | 
+
+           # Push to the Atlas project specifically for feature branches
+           cd inventory/export/sync
+           realm-cli push -y --project 609ea554944fe545460529a1
+
+           # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
+           output=$(realm-cli app describe)
+           app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
+           echo "REALM_APP_ID=$app_id" >> $GITHUB_ENV
+
+           # Store the Realm App ID in the GitHubActionsMetadata database
+           mongo "mongodb+srv://${{ secrets.ATLAS_URI_FEATURE_BRANCHES }}/GitHubActionsMetadata" --username ${{ secrets.ATLAS_USERNAME_FEATURE_BRANCHES }} --password ${{ secrets.ATLAS_PASSWORD_FEATURE_BRANCHES }} --eval "db.metadata.insertOne({'branch': '${{ env.FEATURE_BRANCH}}', 'realm_app_id': '$app_id'})"
+
     - name: "Create a new Realm app for pull requests"
-      if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
-      run: |
+      if: ${{ github.event_name == 'pull_request' }}
+      run: | 
+
+           # Push to the Atlas project specifically for pull requests
            cd inventory/export/sync
            realm-cli push -y --project 609c100ae9974e12169e2480
 
@@ -186,7 +230,7 @@ jobs:
     # - name: "Delete dynamically generated database"
     #   if: ${{ env.IS_DYNAMICALLY_GENERATED_APP }}
     #   run: |
-    #        mongo "mongodb+srv://cluster0.blumg.mongodb.net/InventoryDemo-${{ env.CURRENT_TIME }}" --username ${{ secrets.ATLAS_USERNAME }} --password ${{ secrets.ATLAS_PASSWORD }} --eval "db.dropDatabase()"
+    #        mongo "mongodb+srv://${{ secrets.ATLAS_URI }}/InventoryDemo-${{ env.CURRENT_TIME }}" --username ${{ secrets.ATLAS_USERNAME }} --password ${{ secrets.ATLAS_PASSWORD }} --eval "db.dropDatabase()"
 
 # AUTOMATICALLY PUSH COMMITS FROM STAGING BRANCH TO MAIN BRANCH  
 
