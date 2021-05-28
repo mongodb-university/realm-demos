@@ -4,9 +4,9 @@ name: "Delete feature branch artifacts upon branch deletion"
 on: 
   delete:
     branches-ignore:
-      - main
-      - staging
-      - my-fake-branch
+      - 'refs/heads/main'
+      - 'refs/heads/staging'
+      - 'refs/heads/my-fake-branch'
  
 jobs:    
   deleteArtifacts:
