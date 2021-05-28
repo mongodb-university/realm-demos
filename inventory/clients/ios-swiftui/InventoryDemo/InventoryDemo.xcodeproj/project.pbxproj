@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0A2F0CC62630125D00CEC71B /* InventoryDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CC52630125D00CEC71B /* InventoryDemoApp.swift */; };
 		0A2F0CC82630125D00CEC71B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CC72630125D00CEC71B /* ContentView.swift */; };
-		0A2F0CCA2630125F00CEC71B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F0CC92630125F00CEC71B /* Assets.xcassets */; };
 		0A2F0CCD2630125F00CEC71B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F0CCC2630125F00CEC71B /* Preview Assets.xcassets */; };
 		0A2F0CD82630126000CEC71B /* InventoryItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CD72630126000CEC71B /* InventoryItemTests.swift */; };
 		0A2F0CE32630126000CEC71B /* InventoryDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0CE22630126000CEC71B /* InventoryDemoUITests.swift */; };
@@ -28,6 +27,7 @@
 		0A2F0D0D2630661900CEC71B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2F0D0C2630661900CEC71B /* AddItemView.swift */; };
 		9920FC92265D54FC001B9A05 /* realm-app-id.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9920FC91265D54FC001B9A05 /* realm-app-id.txt */; };
 		9920FC95265D5553001B9A05 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920FC94265D5553001B9A05 /* File.swift */; };
+		9920FC9F265FFE06001B9A05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9920FC9E265FFE06001B9A05 /* Assets.xcassets */; };
 		9924704A2655249D0015C42E /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992470492655249D0015C42E /* ContentViewTests.swift */; };
 		997E5A2E2654150E00CB004F /* RealmUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E5A2D2654150E00CB004F /* RealmUtil.swift */; };
 		997E5A3126541D8300CB004F /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 997E5A3026541D8300CB004F /* ViewInspector */; };
@@ -54,7 +54,6 @@
 		0A2F0CC22630125D00CEC71B /* InventoryDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A2F0CC52630125D00CEC71B /* InventoryDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryDemoApp.swift; sourceTree = "<group>"; };
 		0A2F0CC72630125D00CEC71B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		0A2F0CC92630125F00CEC71B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A2F0CCC2630125F00CEC71B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0A2F0CCE2630125F00CEC71B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A2F0CD32630126000CEC71B /* InventoryDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventoryDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +75,7 @@
 		0A2F0D0C2630661900CEC71B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		9920FC91265D54FC001B9A05 /* realm-app-id.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "realm-app-id.txt"; sourceTree = "<group>"; };
 		9920FC94265D5553001B9A05 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		9920FC9E265FFE06001B9A05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		992470492655249D0015C42E /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		997E5A2D2654150E00CB004F /* RealmUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,10 +133,10 @@
 		0A2F0CC42630125D00CEC71B /* InventoryDemo */ = {
 			isa = PBXGroup;
 			children = (
+				9920FC9E265FFE06001B9A05 /* Assets.xcassets */,
 				9920FC93265D5546001B9A05 /* Utils */,
 				0A2F0CF1263012E000CEC71B /* Models */,
 				0A2F0CF0263012D300CEC71B /* Views */,
-				0A2F0CC92630125F00CEC71B /* Assets.xcassets */,
 				0A2F0CCE2630125F00CEC71B /* Info.plist */,
 				0A2F0CCB2630125F00CEC71B /* Preview Content */,
 			);
@@ -328,8 +328,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9920FC92265D54FC001B9A05 /* realm-app-id.txt in Resources */,
+				9920FC9F265FFE06001B9A05 /* Assets.xcassets in Resources */,
 				0A2F0CCD2630125F00CEC71B /* Preview Assets.xcassets in Resources */,
-				0A2F0CCA2630125F00CEC71B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
