@@ -4,7 +4,7 @@ This repo contains MongoDB Realm demos.  The following is a list of new features
 - SwiftUI version of the Inventory Demo App
 - CI/CD pipeline implemented using GitHub Actions
 
-For more information on the Inventory Demo, visit <a href="./inventory">__Inventory Demo:__</a>
+For more information on the Inventory Demo, visit <a href="./inventory">__Inventory Demo__</a>.
 
 # Questions?
 
