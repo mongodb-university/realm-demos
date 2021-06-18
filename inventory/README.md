@@ -43,6 +43,7 @@ This documentation is focused on helping you install and configure the Realm Dem
 
 - [Android Kotlin client](./clients/android/)
 - [iOS Swift client](./clients/ios/)
+- [iOS SwiftUI client](./clients/ios-swiftui/)
 - [Web GraphQL client](./clients/web-graphql)
 
 
