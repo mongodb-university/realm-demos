@@ -140,11 +140,11 @@ jobs:
            cd inventory/clients/ios-swiftui/InventoryDemo
 
            # Build the app for testing
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4' -derivedDataPath './output' build-for-testing
+           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest' -derivedDataPath './output' build-for-testing
 
            # Define the simulators that will be used for testing
-           iPhone12Pro='platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.4'
-           iPhone12='platform=iOS Simulator,name=iPhone 12,OS=14.4'
+           iPhone12Pro='platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest'
+           iPhone12='platform=iOS Simulator,name=iPhone 12,OS=latest'
            iPadPro4='platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
 
            # Run the tests on a variety of simulators
