@@ -43,8 +43,8 @@ To run the tests from Xcode: ⌘ + U
 
 ### Running tests from the Command Line
 
-If tests were working then something like this should work:
+If tests were working then something like this should work. You have to run from the directory that has the `InventoryDemo.xcodeproj` file. If you cloned this repo it's `inventory/clients/ios-swiftui/InventoryDemo`
 
 ```
-xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.5' -derivedDataPath './output' test
+xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max' -derivedDataPath './output' test
 ```
