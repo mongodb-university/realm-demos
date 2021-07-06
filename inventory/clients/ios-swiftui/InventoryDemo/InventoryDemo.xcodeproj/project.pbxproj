@@ -529,7 +529,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"InventoryDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = BGTGP4V6AC;
+				DEVELOPMENT_TEAM = QX5CR2FTN2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InventoryDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -537,7 +537,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.realm.clusterdb.iOSInventoryDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = io.realm.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -553,7 +553,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"InventoryDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = BGTGP4V6AC;
+				DEVELOPMENT_TEAM = QX5CR2FTN2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InventoryDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -561,7 +561,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.realm.clusterdb.iOSInventoryDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = io.realm.clusterdb.iOSInventoryDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
